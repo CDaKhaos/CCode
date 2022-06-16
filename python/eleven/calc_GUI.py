@@ -1,0 +1,140 @@
+import tkinter as tk
+import time
+import calc_eleven as calc
+import calc_db as db
+
+class ui_eleven_calc(tk.Frame):
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.master = master
+        self.master.title('Eleven Math!')
+        self.pack()
+        self.create_widgets()
+        self.work = calc.c_calc(10, 10)
+        self.work.create()
+#        self.work.print()
+        self.db = db.c_db()
+        self.index_list = -1
+        self.__next_work__()
+        self.tm_begin = time.time()
+        self.b_right = True
+
+    def create_widgets(self):
+        """
+        self.hi_there = tk.Button(self)
+        self.hi_there["text"] = "Hello World\n(click me)"
+        self.hi_there["command"] = self.say_hi
+        self.hi_there.pack()  #(side="top")
+
+        self.quit = tk.Button(self, text="QUIT", fg="red",
+                              command=self.master.destroy)
+        self.quit.pack(side="bottom")
+
+    def say_hi(self):
+        print("hi there, everyone!")
+
+        """
+        self.lbl_index = tk.Label(self, text="",font=('Arial',12),width = 15, height=2)
+        self.lbl_index.pack()
+
+        self.lbl_question = tk.Label(self,text="",bg='green',font=('Arial', 20),width=15, height=3)
+        self.lbl_question.pack()
+
+        self.entry_res = tk.Entry(self, font=('arial', 30),bd = 3, width=15)
+        self.entry_res.place(width=150, height=30)
+        self.entry_res.pack()
+
+        self.lbl_tip = tk.Label(self, text='Hello, Eleven!', bg='yellow',width = 10, height = 2)
+        self.lbl_tip.pack()
+
+        self.btn_ok = tk.Button(self, text='Ok,Next',width = 15, height=2)
+        self.btn_ok["command"] = self.btn_callback_ok
+        self.btn_ok.bind_all('<Return>', self.btn_event)
+        self.btn_ok.pack()
+
+        self.lb_res = tk.Listbox(self)
+        self.lb_res.pack()
+
+    def __update_lbl_index__(self):
+        index = self.index_list+1
+        self.lbl_index.configure(text = "The %2d Question!" % index)
+
+    def __update_lbl_question__(self, str_question):
+        self.lbl_question.configure(text = str_question)
+
+    def __update_lbl_tip__(self, n_right):
+        if n_right == 1:
+            self.lbl_tip.configure(text="right", bg="green")
+        elif n_right == 0:
+            self.lbl_tip.configure(text="wrong", bg="red")
+        elif n_right == 2:
+            self.lbl_tip.configure(text="Well Done", bg="yellow")
+
+
+    def __update_lb_res__(self, str_res):
+        tm_end = time.time()
+        f_usage_time = tm_end - self.tm_begin
+        
+        self.lb_res.insert(tk.END, "%s,  %.02f" % (str_res, f_usage_time))
+        if not self.b_right:
+            self.lb_res.itemconfig(self.lb_res.size()-1, foreground='red')
+        self.tm_begin = tm_end
+
+        self.__insert_db__(f_usage_time)
+
+    def __insert_db__(self, usage_time):
+        # quesion, answer, result, usage_time
+        str_question = self.lbl_question.cget("text")
+        str_answer = self.entry_res.get()
+        self.db.tb_insert(str_question, str_answer, self.b_right, usage_time)
+
+    def btn_callback_ok(self):
+        if self.__check_res__():    # right
+            self.__update_lbl_tip__(1)
+            self.__next_work__()
+        else:                       # wrong
+            self.entry_res.focus()
+            self.entry_res.delete(0, 'end')
+            self.__update_lbl_tip__(0)
+
+        self.__update_lb_res__(self.str_res)
+
+    def btn_event(self, event):
+        if self.b_exit == True:
+            self.master.destroy
+        else:
+            self.btn_callback_ok()
+
+    def __get_new_work__(self, index):
+        list_nums = self.work.get_one_calc(index)
+        if list_nums != None :
+            str_question = list_nums[0]
+            xRes = list_nums[1]
+            self.str_res = str(index+1) + " : " + str_question + str(xRes)
+            return str_question
+        else:
+            return ""
+
+    def __check_res__(self):
+        n_res = int(self.entry_res.get())
+        self.b_right = self.work.check_calc(self.index_list, n_res)
+        return self.b_right
+
+    def __next_work__(self):
+        self.index_list += 1
+        str_question = self.__get_new_work__(self.index_list)
+        if len(str_question) != 0:
+            self.__update_lbl_index__()
+            self.__update_lbl_question__(str_question)
+            self.entry_res.delete(0, 'end')
+            self.entry_res.focus()
+            self.b_exit = False
+        else:   # Game over!
+            self.__update_lbl_tip__(2)
+            self.btn_ok.configure(text='Exit', command=self.master.destroy)
+            self.b_exit = True
+
+root = tk.Tk()
+app = ui_eleven_calc(master=root)
+app.mainloop()
+
