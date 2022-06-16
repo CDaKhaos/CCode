@@ -23,5 +23,5 @@ def run_game():
         # supervise keyboard and mouse item
         gf.check_events()
         gf.update_screen(settings,screen, net)
-        time.sleep(0.5)
+        time.sleep(0.1)
 run_game()
