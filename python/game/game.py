@@ -5,6 +5,7 @@ from settings import Settings
 from net import c_net
 import game_functions as gf
 
+
 def run_game():
     # initialize game and create a dispaly object
     pygame.init()
@@ -22,6 +23,8 @@ def run_game():
     while True:
         # supervise keyboard and mouse item
         gf.check_events()
-        gf.update_screen(settings,screen, net)
-        time.sleep(0.1)
+        gf.update_screen(settings, screen, net)
+        time.sleep(1)
+
+
 run_game()
