@@ -1,6 +1,7 @@
 import random
 from sin_def import sin_get_file_addr
 
+
 class c_calc():
     def __init__(self, counts, max_result, list_result=[], list_num=[]):
         self.counts = counts
@@ -13,16 +14,16 @@ class c_calc():
             x1 = random.randint(1, self.max_result)
             x2 = random.randint(1, self.max_result)
 
-            n_symbol = random.randint(1,2)
+            n_symbol = random.randint(1, 2)
             str_symbol = ''
             n_res = 0
 
-            if n_symbol == 1: # add
+            if n_symbol == 1:  # add
                 if x1 + x2 > self.max_result:
                     continue
                 str_symbol = '+'
                 n_res = x1 + x2
-            elif n_symbol == 2: # sub
+            elif n_symbol == 2:  # sub
                 if x1 < x2:
                     x1, x2 = x2, x1
                 str_symbol = '-'
@@ -34,7 +35,8 @@ class c_calc():
 
             self.list_result.append(str)
             self.list_num.append([str, n_res])
-        return  self.list_num
+        print(self.list_num)
+        return self.list_num
 
     def get_one_calc(self, index_list):
         if index_list < len(self.list_num):
@@ -50,7 +52,7 @@ class c_calc():
         for str_calc in self.list_result:
             str_print = '%2d:\t %s =   ' % (index, str_calc)
             print(str_print)
-            index+=1
+            index += 1
 
     def output(self):
         index = 1

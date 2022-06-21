@@ -107,10 +107,9 @@ class ui_eleven_calc(tk.Frame):
 
     def __get_new_work__(self, index):
         list_nums = self.work.get_one_calc(index)
-        if list_nums != None :
+        if list_nums != None:
             str_question = list_nums[0]
             xRes = list_nums[1]
-            self.str_res = str(index+1) + " : " + str_question + str(xRes)
             return str_question
         else:
             return ""
@@ -118,11 +117,15 @@ class ui_eleven_calc(tk.Frame):
     def __check_res__(self):
         n_res = int(self.entry_res.get())
         self.b_right = self.work.check_calc(self.index_list, n_res)
+        # record the result for print the listbox
+        self.str_res = str(self.index_list+1) + " : " + self.lbl_question.cget("text") + self.entry_res.get()
         return self.b_right
 
     def __next_work__(self):
+        print(self.index_list)
         self.index_list += 1
         str_question = self.__get_new_work__(self.index_list)
+        print(str_question)
         if len(str_question) != 0:
             self.__update_lbl_index__()
             self.__update_lbl_question__(str_question)

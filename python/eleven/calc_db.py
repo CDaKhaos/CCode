@@ -16,7 +16,7 @@ CONST_TB_DROP = "DROP TABLE IF EXISTS " + CONST_TB_NAME
 class c_db():
     def __init__(self):
         # 连接配置信息
-        self.conn = pymysql.connect(host='127.0.0.1',
+        self.conn = pymysql.connect(host='192.168.67.19',
                        port = 3306,
                        user = 'root',
                        password = 'chenc',
