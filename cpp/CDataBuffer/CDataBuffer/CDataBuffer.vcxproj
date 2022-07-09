@@ -123,20 +123,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CAllData.cpp" />
-    <ClCompile Include="CBaseActor.cpp" />
-    <ClCompile Include="CSoldier.cpp" />
-    <ClCompile Include="CUav.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CAllData.h" />
-    <ClInclude Include="CBaseActor.h" />
-    <ClInclude Include="CBaseUnit.h" />
     <ClInclude Include="CDataBuffer.h" />
-    <ClInclude Include="CDataDefine.h" />
-    <ClInclude Include="CSoldier.h" />
-    <ClInclude Include="CUav.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
