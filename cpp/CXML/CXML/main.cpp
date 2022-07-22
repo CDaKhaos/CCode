@@ -110,8 +110,8 @@ int main(int argc, char *argv[])
     testData.vec.push_back(5);
 
 
-    testData.vFloat.push_back(10.1);
-    testData.vFloat.push_back(20.2);
+    testData.vFloat.push_back(10.1f);
+    testData.vFloat.push_back(20.2f);
 
     testData.vString.push_back("30");
     testData.vString.push_back("40");
@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
     printf("\nTestData4: %i %i %g %s %s\n", testData4.xyz, testData4.dataOne.i, testData4.dataOne.d,
         testData4.dataOne.s, testData4.dataVec.front().s);
 	FILE *fp1 = NULL;
-	fopen_s(&fp1, "D:\\234.xml", "w");
+	fopen(&fp1, "D:\\234.xml", "w");
 	test2.Print(fp1, 0);
 	fclose(fp1);
 

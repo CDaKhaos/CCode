@@ -1,14 +1,10 @@
 ﻿#pragma once
 
-//#define QT
+//#define LINUX
 
 #if _MSC_VER >=1600 //(1600 is VS2010)
 #pragma execution_character_set("utf-8")
 #endif
-
-#ifdef QT
-    #include <QCoreApplication>
-#endif // QT
 
 #include "tinyxml.h"
 
@@ -19,6 +15,16 @@
 
 namespace SINUX
 {
+	template< class T >
+	void cc_sprintf(char* const buffer, char const* const _format, const T& value, size_t iBufSize = 2048)
+	{
+#ifdef LINUX
+		sprintf(buffer, _format, value);
+#else
+		sprintf_s(buffer, iBufSize, _format, value);
+#endif
+	}
+
 	// 为了调用时，不用带模板参数，定义空类
 	class IdentityBase
 	{
@@ -81,12 +87,7 @@ namespace SINUX
     static char const *	ConvertToString(double const & d)
 	{
 		static char buffer[2048];
-		size_t ibufSize = 2048;
-#ifdef QT
-        sprintf(buffer, "%g", d);
-#else
-        sprintf_s(buffer, ibufSize, "%0.10f", d);
-#endif
+        cc_sprintf(buffer, "%0.10f", d);
 		return buffer;
 	}
 
@@ -99,22 +100,16 @@ namespace SINUX
     static char const *	ConvertToString(int const & d)
 	{
         static char buffer[2048];
-#ifdef QT
-        sprintf(buffer, "%d", d);
-#else
-        sprintf_s(buffer, "%d", d);
-#endif
+
+        cc_sprintf(buffer, "%d", d);
+
 		return buffer;
 	}
 
     static char const *	ConvertToString(unsigned long long const & d)
 	{
 		static char buffer[2048];
-#ifdef QT
-        sprintf(buffer, "%llu", d);
-#else
-        sprintf_s(buffer, sizeof(buffer), "%llu", d);
-#endif
+        cc_sprintf(buffer, "%llu", d);
 		return buffer;
 	}
 
