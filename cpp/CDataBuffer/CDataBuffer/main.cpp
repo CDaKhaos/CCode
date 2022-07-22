@@ -41,6 +41,7 @@ int main()
 	t.Serial(dBuf);
 	size_t iLen = 0;
 	char* pSend = dBuf.GetCharBuf(iLen);
+    cout << "Send" << endl;
 	// --
 	CSunShine::CDataBuffer dBuf1(pSend, iLen);
 	test t1;

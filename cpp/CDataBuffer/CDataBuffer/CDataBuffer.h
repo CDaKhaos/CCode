@@ -1,15 +1,27 @@
 #ifndef __CC_DATA_BUFFER_H__
 #define __CC_DATA_BUFFER_H__
 
-#pragma once;
+#pragma once
 
 #include <assert.h>
 #include <string>
 #include <vector>
 using namespace std;
 
+#define LINUX
+
 namespace CSunShine
 {
+    void cc_memcpy(void* pDes, const void* pSrc, size_t iLen)
+    {
+#ifdef LINUX
+            memcpy(pDes, pSrc, iLen);
+#else
+			memcpy_s(pDes, iLen, pSrc, iLen);
+#endif
+
+    }
+
 	class CDataBuffer
 	{
 	public:
@@ -21,7 +33,7 @@ namespace CSunShine
 		{
 			Init();
 			AdaptBuffer(iLen);
-			memcpy_s(m_pBuffer, iLen, pBuf, iLen);
+            cc_memcpy(m_pBuffer, pBuf, iLen);
 		}
 		~CDataBuffer()
 		{
@@ -41,8 +53,7 @@ namespace CSunShine
 			m_iSetBufOffset = other.m_iSetBufOffset;
 
 			m_pBuffer = new char[m_iBufferSize];
-			memcpy_s(m_pBuffer, m_iBufferSize, other.m_pBuffer, m_iBufferSize);
-
+            cc_memcpy(m_pBuffer, other.m_pBuffer, m_iBufferSize);
 			return *this;
 		}
 
@@ -51,7 +62,7 @@ namespace CSunShine
 		{
 			i = m_iSetBufOffset;
 			char* pBuf = new char[m_iSetBufOffset];
-			memcpy_s(pBuf, m_iSetBufOffset, m_pBuffer, m_iSetBufOffset);
+			cc_memcpy(pBuf, m_pBuffer, m_iSetBufOffset);
 			return pBuf;
 		}
 
@@ -60,7 +71,7 @@ namespace CSunShine
 		{
 			int nSize = sizeof(T);
 			AdaptBuffer(nSize);
-			memcpy_s(m_pBuffer+m_iSetBufOffset, m_iBufferSize, &t, nSize);
+			cc_memcpy(m_pBuffer+m_iSetBufOffset, &t, nSize);
 			m_iSetBufOffset += nSize;
 
 			return *this;
@@ -71,7 +82,7 @@ namespace CSunShine
 		{
 			int nSize = sizeof(T);
 			assert(m_iGetBufOffset + nSize <= m_iBufferSize);
-			memcpy_s(&t, nSize, m_pBuffer+m_iGetBufOffset, nSize);
+			cc_memcpy(&t, m_pBuffer+m_iGetBufOffset, nSize);
 			m_iGetBufOffset += nSize;
 
 			return *this;
@@ -81,7 +92,7 @@ namespace CSunShine
 		{
 			size_t iSize = sValue.size()+1;
 			AdaptBuffer(iSize);
-			memcpy_s(m_pBuffer+m_iSetBufOffset, m_iBufferSize, sValue.c_str(), iSize);
+			cc_memcpy(m_pBuffer+m_iSetBufOffset, sValue.c_str(), iSize);
 			m_iSetBufOffset += iSize;
 
 			return *this;
@@ -139,7 +150,7 @@ namespace CSunShine
 			{
 				m_iBufferSize += 512;
 				char* pBuf = new char[m_iBufferSize];
-				memcpy_s(pBuf, m_iBufferSize, m_pBuffer, m_iSetBufOffset);
+				cc_memcpy(pBuf, m_pBuffer, m_iBufferSize);
 				delete[] m_pBuffer;
 				m_pBuffer = pBuf;
 			}
