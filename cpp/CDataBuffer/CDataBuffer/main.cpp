@@ -32,6 +32,11 @@ struct test
 		dBuf >> c;
 		dBuf >> d;
 	}
+
+	void print()
+	{
+		cout << a << "\t" << b << "\t" << c << "\t" << d << "\t";
+	}
 };
 
 int main()
@@ -46,6 +51,8 @@ int main()
 	CSunShine::CDataBuffer dBuf1(pSend, iLen);
 	test t1;
 	t1.DSerial(dBuf1);
+
+	t1.print();
 
 	getchar();
 	return 0;

@@ -150,7 +150,7 @@ namespace CSunShine
 			{
 				m_iBufferSize += 512;
 				char* pBuf = new char[m_iBufferSize];
-				cc_memcpy(pBuf, m_pBuffer, m_iBufferSize);
+				cc_memcpy(pBuf, m_pBuffer, m_iSetBufOffset);
 				delete[] m_pBuffer;
 				m_pBuffer = pBuf;
 			}
