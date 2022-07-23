@@ -13,6 +13,8 @@
 #include <complex>
 #include <sstream>
 
+#define LINUX
+
 namespace SINUX
 {
 	template< class T >

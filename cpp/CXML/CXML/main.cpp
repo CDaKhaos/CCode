@@ -121,12 +121,12 @@ int main(int argc, char *argv[])
 
     printf("\nTestData: %d %d %g %s %d\n", testData.i, testData.iref, testData.d, testData.s, testData.vec[0]);
 
-	MakeXml("D:\\1234.xml", testData);
+	MakeXml("./1234.xml", testData);
 
     std::cout << "MakeXml" << "\n";
 
 	MyData data2;
-	ParseXml("D:\\1234.xml", data2);
+	ParseXml("./1234.xml", data2);
 	printf("\ndata2: %d %d %g %s\n",
 		data2.i, data2.iref, data2.d, data2.s);
 
@@ -141,10 +141,10 @@ int main(int argc, char *argv[])
 	testData3.dataOne2 = data2;
 	testData3.dataVec.push_back(data2);
 	testData3.dataVec.push_back(data2);
-	MakeXml("D:\\234.xml", testData3);
+	MakeXml("./234.xml", testData3);
 
 	MyData2 data21;
-    ParseXml("D:\\234.xml", data21);
+    ParseXml("./234.xml", data21);
 
 	int b = 0;
 #if 0

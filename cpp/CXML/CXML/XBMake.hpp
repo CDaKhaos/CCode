@@ -17,7 +17,7 @@ namespace SINUX
 		doc.LinkEndChild(pEle);
 
 		FILE *fp = NULL;
-		fopen_s(&fp, sPath.c_str(), "w");
+		fp = fopen(sPath.c_str(), "w");
 		doc.Print(fp, 0);
 		fclose(fp);
 
