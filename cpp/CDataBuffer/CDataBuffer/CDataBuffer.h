@@ -6,20 +6,18 @@
 #include <assert.h>
 #include <string>
 #include <vector>
+#include <cstring>
 using namespace std;
-
-#define LINUX
 
 namespace CSunShine
 {
     void cc_memcpy(void* pDes, const void* pSrc, size_t iLen)
     {
-#ifdef LINUX
+#ifdef __linux__
             memcpy(pDes, pSrc, iLen);
-#else
+#elif _WIN32
 			memcpy_s(pDes, iLen, pSrc, iLen);
 #endif
-
     }
 
 	class CDataBuffer
