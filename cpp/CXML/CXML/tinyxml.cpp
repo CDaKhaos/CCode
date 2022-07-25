@@ -876,7 +876,7 @@ bool TiXmlDocument::LoadFile( const char* filename )
 	value = filename;
 
 	FILE* file = NULL;
-	fopen_s(&file, value.c_str (), "r" );
+	cc_fopen(&file, value.c_str (), "r" );
 	//fopen_s(&file, value.c_str(), "r");
 
 	if ( file )

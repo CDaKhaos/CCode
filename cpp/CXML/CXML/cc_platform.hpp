@@ -4,7 +4,7 @@
 #define __CC_PLATFORM_H__
 
 
-//#define LINUX
+#define LINUX
 
 #include <stdio.h>
 #include <stdlib.h>
