@@ -3,18 +3,11 @@
 #include "XBMemberValuePolicy.hpp"
 #include "XBind.hpp"
 
-#define LINUX
+
 
 namespace SINUX
 {
-	int cc_strcmp(char const* _String1, char const* _String2)
-	{
-#ifdef LINUX
-		return strcmp(_String1, _String2);
-#else
-		return cc_strcmp(_String1, _String2)
-#endif
-	}
+
 
 	template<class T>
 	class IMemberHolder

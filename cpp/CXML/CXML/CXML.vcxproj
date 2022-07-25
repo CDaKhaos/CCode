@@ -130,6 +130,7 @@
     <ClInclude Include="XBMake.hpp" />
     <ClInclude Include="XBMemberHolder.hpp" />
     <ClInclude Include="XBMemberValuePolicy.hpp" />
+    <ClInclude Include="cc_platform.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

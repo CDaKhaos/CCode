@@ -7,26 +7,15 @@
 #endif
 
 #include "tinyxml.h"
+#include "cc_platform.hpp"
 
 #include <vector>
 #include <list>
 #include <complex>
 #include <sstream>
 
-#define LINUX
-
 namespace SINUX
 {
-	template< class T >
-	void cc_sprintf(char* const buffer, char const* const _format, const T& value, size_t iBufSize = 2048)
-	{
-#ifdef LINUX
-		sprintf(buffer, _format, value);
-#else
-		sprintf_s(buffer, iBufSize, _format, value);
-#endif
-	}
-
 	// 为了调用时，不用带模板参数，定义空类
 	class IdentityBase
 	{

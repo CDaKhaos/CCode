@@ -24,6 +24,7 @@ distribution.
 
 #include <ctype.h>
 #include "tinyxml.h"
+#include "cc_platform.hpp"
 
 #ifdef TIXML_USE_STL
 #include <sstream>
@@ -211,7 +212,7 @@ void TiXmlBase::PutString( const TIXML_STRING& str, TIXML_STRING* outString )
 			// Easy pass at non-alpha/numeric/symbol
 			// 127 is the delete key. Below 32 is symbolic.
 			char buf[ 32 ];
-			sprintf( buf, "&#x%02X;", (unsigned) ( c & 0xff ) );
+			cc_sprintf( buf, "&#x%02X;", (unsigned) ( c & 0xff ) );
 			outString->append( buf, strlen( buf ) );
 			++i;
 		}
@@ -232,7 +233,7 @@ TiXmlBase::StringToBuffer::StringToBuffer( const TIXML_STRING& str )
 	buffer = new char[iSize];
 	if ( buffer )
 	{
-		strcpy( buffer, str.c_str() );
+		cc_strcpy( buffer, str.c_str(), iSize );
 	}
 }
 
@@ -672,7 +673,7 @@ int TiXmlElement::QueryDoubleAttribute( const char* name, double* dval ) const
 void TiXmlElement::SetAttribute( const char * name, int val )
 {	
 	char buf[64];
-	sprintf( buf, "%d", val );
+	cc_sprintf( buf, "%d", val );
 	SetAttribute( name, buf );
 }
 
@@ -875,7 +876,7 @@ bool TiXmlDocument::LoadFile( const char* filename )
 	value = filename;
 
 	FILE* file = NULL;
-	file = fopen( value.c_str (), "r" );
+	fopen_s(&file, value.c_str (), "r" );
 	//fopen_s(&file, value.c_str(), "r");
 
 	if ( file )
@@ -921,9 +922,8 @@ bool TiXmlDocument::LoadFile( const char* filename )
 bool TiXmlDocument::SaveFile( const char * filename ) const
 {
 	// The old c stuff lives on...
-	FILE* fp = fopen( filename, "w" );
-	//FILE* fp = NULL;
-	//fopen_s(&fp, filename, "w");
+	FILE* fp = NULL;
+	cc_fopen(&fp, filename, "w");
 	if ( fp )
 	{
 		Print( fp, 0 );
@@ -1034,14 +1034,14 @@ void TiXmlAttribute::StreamOut( TIXML_OSTREAM * stream ) const
 
 int TiXmlAttribute::QueryIntValue( int* ival ) const
 {
-	if ( sscanf( value.c_str(), "%d", ival ) == 1 )
+	if (cc_sscanf( value.c_str(), "%d", ival ) == 1 )
 		return TIXML_SUCCESS;
 	return TIXML_WRONG_TYPE;
 }
 
 int TiXmlAttribute::QueryDoubleValue( double* dval ) const
 {
-	if ( sscanf( value.c_str(), "%lf", dval ) == 1 )
+	if (cc_sscanf( value.c_str(), "%lf", dval ) == 1 )
 		return TIXML_SUCCESS;
 	return TIXML_WRONG_TYPE;
 }
@@ -1049,14 +1049,14 @@ int TiXmlAttribute::QueryDoubleValue( double* dval ) const
 void TiXmlAttribute::SetIntValue( int _value )
 {
 	char buf [64];
-	sprintf(buf, "%d", _value);
+	cc_sprintf(buf, "%d", _value);
 	SetValue (buf);
 }
 
 void TiXmlAttribute::SetDoubleValue( double _value )
 {
 	char buf [64];
-	sprintf(buf, "%lf", _value);
+	cc_sprintf(buf, "%lf", _value);
 	SetValue (buf);
 }
 
