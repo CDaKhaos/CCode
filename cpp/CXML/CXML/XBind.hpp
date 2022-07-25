@@ -3,6 +3,8 @@
 #include "XBDef.hpp"
 #include "XBMemberHolder.hpp"
 
+#include <assert.h>
+using namespace tinyxml2;
 namespace SINUX
 {
     // 绑定基类
@@ -10,12 +12,12 @@ namespace SINUX
 	class XBind
 	{
 	public:
-		virtual bool fromXml(TiXmlElement const & elem, T * data, SerializeParams const &) const = 0;
-		virtual bool intoXml(TiXmlElement * elem, T const & data, SerializeParams const &) const = 0;
+		virtual bool fromXml(XMLElement const & elem, T * data, SerializeParams const &) const = 0;
+		virtual bool intoXml(XMLElement * elem, T const & data, SerializeParams const &) const = 0;
 	};
 
 	template<class T>
-    bool BindToXml(TiXmlElement * elemOut, T const & dataIn)
+    bool BindToXml(XMLElement * elemOut, T const & dataIn)
 	{
 		XBind<T> const * binding = GetXBind(dataIn, Identity<T>());
 		SerializeParams params;
@@ -23,7 +25,7 @@ namespace SINUX
 	}
 
 	template<class T>
-    bool BindFromXml(TiXmlElement const & elemIn, T * dataOut)
+    bool BindFromXml(XMLElement const & elemIn, T * dataOut)
 	{
 		XBind<T> const * binding = GetXBind(*dataOut, Identity<T>());
 		SerializeParams params;
@@ -48,9 +50,9 @@ namespace SINUX
 		}
 
         // 解析
-		virtual bool fromXml(TiXmlElement const & elem, T * data, SerializeParams const & params) const
+		virtual bool fromXml(XMLElement const & elem, T * data, SerializeParams const & params) const
 		{
-			TiXmlElement const * child = elem.FirstChildElement();
+			XMLElement const * child = elem.FirstChildElement();
             for (size_t i = 0; i < m_vMembers.size(); i++)
 			{
                 IMemberHolder<T> * pMbHd = m_vMembers[i];
@@ -96,7 +98,7 @@ namespace SINUX
 		}
 
         // 生成
-		virtual bool intoXml(TiXmlElement * elem, T const & data, SerializeParams const &) const
+		virtual bool intoXml(XMLElement * elem, T const & data, SerializeParams const &) const
 		{
             for (size_t i = 0; i < m_vMembers.size(); i++)
             {
@@ -115,9 +117,9 @@ namespace SINUX
 	class XBindGeneric : public XBind<T>
 	{
 	public:
-		virtual bool fromXml(TiXmlElement const & elem, T * data, SerializeParams const &) const
+		virtual bool fromXml(XMLElement const & elem, T * data, SerializeParams const &) const
 		{
-            TiXmlNode * pNode = elem.FirstChild();
+            const XMLNode * pNode = elem.FirstChild();
 			if (pNode == NULL)
 			{
 				ConvertFromString("", data);
@@ -126,7 +128,7 @@ namespace SINUX
             assert(pNode != NULL);
             if (pNode == NULL)
                 return false;
-            TiXmlText * pNodeData = pNode->ToText();
+            const XMLText * pNodeData = pNode->ToText();
             assert(pNodeData != NULL);
             if (pNodeData == NULL)
                 return false;
@@ -134,9 +136,11 @@ namespace SINUX
 			return true;
 		}
 
-		virtual bool intoXml(TiXmlElement * elem, T const & data, SerializeParams const &) const
+		virtual bool intoXml(XMLElement * elem, T const & data, SerializeParams const &) const
 		{
-			TiXmlText textData(ConvertToString(data));
+			//XMLText textData(ConvertToString(data)); 
+			XMLText* textData = elem->GetDocument()->NewText(ConvertToString(data)) ; //cyx 20220725
+			
 			elem->InsertEndChild(textData);
 			return true;
 		}
@@ -155,10 +159,10 @@ namespace SINUX
 		{
 		}
 
-		virtual bool fromXml(TiXmlElement const & elem, VecT * data, SerializeParams const & params) const
+		virtual bool fromXml(XMLElement const & elem, VecT * data, SerializeParams const & params) const
 		{
 			data->clear();
-			TiXmlElement const * child;
+			XMLElement const * child;
 			child = elem.FirstChildElement();
             if (m_szAttributeName)
 			{
@@ -184,7 +188,7 @@ namespace SINUX
 			return true;
 		}
 
-		virtual bool intoXml(TiXmlElement * elem, VecT const & data, SerializeParams const & params) const
+		virtual bool intoXml(XMLElement * elem, VecT const & data, SerializeParams const & params) const
 		{
             if (m_szAttributeName)
 			{
@@ -204,8 +208,11 @@ namespace SINUX
 				{
 					tag = elem->Value();
 				}
-				TiXmlElement child(tag);
-				if (!binding->intoXml(&child, value, params)) 
+				
+				//XMLElement child(tag);
+				XMLElement *child = elem->GetDocument()->NewElement(tag); //cyx 20220725
+
+				if (!binding->intoXml(child, value, params)) 
 				{
 					return false;
 				}
@@ -228,10 +235,10 @@ namespace SINUX
 		{
 		}
 
-		virtual bool fromXml(TiXmlElement const & elem, VecT * data, SerializeParams const & params) const
+		virtual bool fromXml(XMLElement const & elem, VecT * data, SerializeParams const & params) const
 		{
 			data->clear();
-			TiXmlElement const * child;
+			XMLElement const * child;
 			child = elem.FirstChildElement();
             if (m_szAttributeName) {
 				int sz = 0;
@@ -256,7 +263,7 @@ namespace SINUX
 			return true;
 		}
 
-		virtual bool intoXml(TiXmlElement * elem, VecT const & data, SerializeParams const & params) const
+		virtual bool intoXml(XMLElement * elem, VecT const & data, SerializeParams const & params) const
 		{
             if (m_szAttributeName) {
                 elem->SetAttribute(m_szAttributeName, ConvertToString(data.size()));
@@ -274,7 +281,7 @@ namespace SINUX
 				else {
 					tag = elem->Value();
 				}
-				TiXmlElement child(tag);
+				XMLElement child(tag);
 				if (!binding->intoXml(&child, *value, params)) {
 					return false;
 				}
@@ -297,9 +304,9 @@ namespace SINUX
         {
         }
 
-        virtual bool fromXml(TiXmlElement const & elem, CpxT * data, SerializeParams const & params) const
+        virtual bool fromXml(XMLElement const & elem, CpxT * data, SerializeParams const & params) const
         {
-            TiXmlElement const * child;
+            XMLElement const * child;
             child = elem.FirstChildElement();
             if (m_szAttributeName)
             {
@@ -334,7 +341,7 @@ namespace SINUX
             return true;
         }
 
-        virtual bool intoXml(TiXmlElement * elem, CpxT const & data, SerializeParams const & params) const
+        virtual bool intoXml(XMLElement * elem, CpxT const & data, SerializeParams const & params) const
         {
 //            if (m_szAttributeName)
 //            {
@@ -343,8 +350,9 @@ namespace SINUX
 
             T const& valueR = data.real();
             XBind<T> const * bindingR = GetXBind(valueR, Identity<T>());
-            TiXmlElement childR("real");
-            if (!bindingR->intoXml(&childR, valueR, params))
+            //XMLElement childR("real");
+			XMLElement *childR = elem->GetDocument()->NewElement("real"); //cyx 20220725
+            if (!bindingR->intoXml(childR, valueR, params))
             {
                 return false;
             }
@@ -352,8 +360,9 @@ namespace SINUX
 
             T const& valueI = data.imag();
             XBind<T> const * bindingI = GetXBind(valueI, Identity<T>());
-            TiXmlElement childI("imag");
-            if (!bindingI->intoXml(&childI, valueI, params))
+            //XMLElement childI("imag");
+			XMLElement *childI = elem->GetDocument()->NewElement("imag"); //cyx 20220725
+            if (!bindingI->intoXml(childI, valueI, params))
             {
                 return false;
             }

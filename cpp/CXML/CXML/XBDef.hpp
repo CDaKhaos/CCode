@@ -1,12 +1,11 @@
 ﻿#pragma once
 
-//#define LINUX
 
 #if _MSC_VER >=1600 //(1600 is VS2010)
 #pragma execution_character_set("utf-8")
 #endif
 
-#include "tinyxml.h"
+#include "tinyxml2.h"
 #include "cc_platform.hpp"
 
 #include <vector>

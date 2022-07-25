@@ -89,10 +89,6 @@ GetXBind(MyData2 const &, Identity<MyData2>)
 
 int main(int argc, char *argv[])
 {
-	#ifdef QT
-		QCoreApplication a(argc, argv);
-	#endif // QT    
-
     MyData testData;
     testData.i = 100;
     testData.iref = 52;
@@ -102,7 +98,8 @@ int main(int argc, char *argv[])
     testData.uc = 255;
 	testData.flag = 1;
     //testData.ss = std::string("mine is sljfdksj中文测试");
-	testData.ss = std::string("mine is sljfdksj");
+    std::string tmp_ss = std::string("mine is sljfdksj中文测试");
+    testData.ss = tmp_ss;
     testData.vec.push_back(05);
     testData.vec.push_back(1);
     testData.vec.push_back(2);
@@ -121,7 +118,7 @@ int main(int argc, char *argv[])
 
     printf("\nTestData: %d %d %g %s %d\n", testData.i, testData.iref, testData.d, testData.s, testData.vec[0]);
 
-	MakeXml("./1234.xml", testData);
+	//MakeXml("./1234.xml", testData);
 
     std::cout << "MakeXml" << "\n";
 
@@ -151,10 +148,10 @@ int main(int argc, char *argv[])
 
 
     MyData testData2;
-	TiXmlElement pNewEle("NEW");
+	XMLElement pNewEle("NEW");
     BindFromXml(*pNewEle, &testData2);
     printf("\nTestData2: %d %d %g %s %d\n", testData2.i, testData2.iref, testData2.d, testData2.s, testData2.vec[0]);
-    TiXmlElement testAgain("AGAIN");
+    XMLElement testAgain("AGAIN");
     BindToXml(&testAgain, testData2);
     //testAgain.Print(stdout, 0);
 
@@ -167,7 +164,7 @@ int main(int argc, char *argv[])
     printf("\nTestData3: %i %i %g %s %s\n", testData3.xyz, testData3.dataOne.i,
         testData3.dataOne.d, testData3.dataOne.s, testData3.dataVec.front().s);
 
-    TiXmlElement test2("TEST2");
+    XMLElement test2("TEST2");
     BindToXml(&test2, testData3);
     test2.Print(stdout, 0);
     MyData2 testData4;
@@ -185,12 +182,7 @@ int main(int argc, char *argv[])
     BindFromXml(test2, &testData5);
     printf("\nTestData5: %i %i %g %s %s\n", testData5.xyz, testData5.dataOne.i, testData5.dataOne.d,
         testData5.dataOne.s, testData5.dataVec.front().s);
-#endif
-
-	#ifdef QT
-		return a.exec();
-	#else
-		return 0;
-	#endif // QT   
+#endif 
     
+    return 0;
 }

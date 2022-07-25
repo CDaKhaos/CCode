@@ -1,10 +1,10 @@
-#pragma once
+﻿#pragma once
 
 #include "XBMemberValuePolicy.hpp"
 #include "XBind.hpp"
 
 
-
+using namespace tinyxml2;
 namespace SINUX
 {
 
@@ -30,8 +30,8 @@ namespace SINUX
 
         virtual char const * tag(int which = 0) { return m_tag._tag[which]; }
 
-		virtual bool fromXml(TiXmlElement const &, T *) = 0;
-		virtual bool intoXml(TiXmlElement *, T const *) = 0;
+		virtual bool fromXml(XMLElement const &, T *) = 0;
+		virtual bool intoXml(XMLElement *, T const *) = 0;
 		virtual bool isAttributeMember() = 0;
 	};
 
@@ -47,7 +47,7 @@ namespace SINUX
             _mvPolicy = mvPolicy;
         }
 
-        virtual bool fromXml(TiXmlElement const & elem, T * thisPtr)
+        virtual bool fromXml(XMLElement const & elem, T * thisPtr)
         {
             if (!cc_strcmp(elem.Value(), IMemberHolder<T>::tag()))
             {
@@ -69,14 +69,18 @@ namespace SINUX
             }
         }
 
-        virtual bool intoXml(TiXmlElement * elem, T const * thisPtr)
+        virtual bool intoXml(XMLElement * elem, T const * thisPtr)
         {
             MT const & mv = _mvPolicy->getMemberValue(thisPtr);
-            TiXmlElement child(IMemberHolder<T>::tag());
+
+			
+            //XMLElement child(IMemberHolder<T>::tag());
+
+			XMLElement *child =elem->GetDocument()->NewElement(IMemberHolder<T>::tag());//cyx 20220725
             XBind<MT> const * binding = GetXBind(mv, Identity<MT>());
-            if (binding->intoXml(&child, mv, IMemberHolder<T>::params()))
+            if (binding->intoXml(child, mv, IMemberHolder<T>::params()))
             {
-                elem->InsertEndChild(child);
+                elem->InsertEndChild(child); //cyx 20220725
                 return true;
             }
             else
@@ -263,7 +267,7 @@ namespace SINUX
             m_mvPolicy = mvPolicy;
 		}
 
-		virtual bool fromXml(TiXmlElement const & elem, T * thisPtr)
+		virtual bool fromXml(XMLElement const & elem, T * thisPtr)
 		{
             MT & mv = const_cast<MT &>(m_mvPolicy->getMemberValue(thisPtr));
 			XBind<MT> const * binding = GetXBind(mv, Identity<MT>());
@@ -276,14 +280,14 @@ namespace SINUX
 			}
 		}
 
-		virtual bool intoXml(TiXmlElement * elem, T const * thisPtr)
+		virtual bool intoXml(XMLElement * elem, T const * thisPtr)
 		{
             MT const & mv = m_mvPolicy->getMemberValue(thisPtr);
 			XBind<MT> const * binding = GetXBind(mv, Identity<MT>());
 			std::string oldValue = elem->Value();
             elem->SetValue(IMemberHolder<T>::tag());
             bool ret = binding->intoXml(elem, mv, IMemberHolder<T>::params());
-			elem->SetValue(oldValue);
+            elem->SetValue(oldValue.c_str());
 			return ret;
 		}
 
@@ -302,7 +306,7 @@ namespace SINUX
             m_mvPolicy = mvPolicy;
 		}
 
-		virtual bool fromXml(TiXmlElement const & elem, T * thisPtr)
+		virtual bool fromXml(XMLElement const & elem, T * thisPtr)
 		{
 			MT mv;
             const char * attributeValue = elem.Attribute(IMemberHolder<T>::tag());
@@ -316,7 +320,7 @@ namespace SINUX
 			}
 		}
 
-		virtual bool intoXml(TiXmlElement * elem, T const * thisPtr)
+		virtual bool intoXml(XMLElement * elem, T const * thisPtr)
 		{
             MT const & mv = m_mvPolicy->getMemberValue(thisPtr);
 			char const * attributeValue = ConvertToString(mv);
