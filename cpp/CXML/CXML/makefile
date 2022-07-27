@@ -1,2 +1,6 @@
 MAIN:
-	g++ main.cpp tinyxml.cpp tinystr.cpp tinyxmlparser.cpp tinyxmlerror.cpp -o main
+	g++ main.cpp tinyxml2.cpp -o main
+run:
+	./main
+clear:
+	rm main *.xml

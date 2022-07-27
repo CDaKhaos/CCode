@@ -281,7 +281,8 @@ namespace SINUX
 				else {
 					tag = elem->Value();
 				}
-				XMLElement child(tag);
+				// XMLElement child(tag);  //cyx 20220725
+		    	XMLElement *child = elem->GetDocument()->NewElement(tag); 
 				if (!binding->intoXml(&child, *value, params)) {
 					return false;
 				}

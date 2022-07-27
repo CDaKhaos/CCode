@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
 
     printf("\nTestData: %d %d %g %s %d\n", testData.i, testData.iref, testData.d, testData.s, testData.vec[0]);
 
-	//MakeXml("./1234.xml", testData);
+	MakeXml("./1234.xml", testData);
 
     std::cout << "MakeXml" << "\n";
 
@@ -143,46 +143,8 @@ int main(int argc, char *argv[])
 	MyData2 data21;
     ParseXml("./234.xml", data21);
 
-	int b = 0;
-#if 0
+    getchar();
 
-
-    MyData testData2;
-	XMLElement pNewEle("NEW");
-    BindFromXml(*pNewEle, &testData2);
-    printf("\nTestData2: %d %d %g %s %d\n", testData2.i, testData2.iref, testData2.d, testData2.s, testData2.vec[0]);
-    XMLElement testAgain("AGAIN");
-    BindToXml(&testAgain, testData2);
-    //testAgain.Print(stdout, 0);
-
-
-    MyData2 testData3;
-    testData3.xyz = 10342;
-    testData3.dataOne = testData2;
-    testData3.dataVec.push_back(testData2);
-    testData3.dataVec.push_back(testData2);
-    printf("\nTestData3: %i %i %g %s %s\n", testData3.xyz, testData3.dataOne.i,
-        testData3.dataOne.d, testData3.dataOne.s, testData3.dataVec.front().s);
-
-    XMLElement test2("TEST2");
-    BindToXml(&test2, testData3);
-    test2.Print(stdout, 0);
-    MyData2 testData4;
-    BindFromXml(test2, &testData4);
-    printf("\nTestData4: %i %i %g %s %s\n", testData4.xyz, testData4.dataOne.i, testData4.dataOne.d,
-        testData4.dataOne.s, testData4.dataVec.front().s);
-	FILE *fp1 = NULL;
-	fopen(&fp1, "D:\\234.xml", "w");
-	test2.Print(fp1, 0);
-	fclose(fp1);
-
-    MyData2 testData5;
-    test2.SetAttribute("XYZ", "");
-    testData5.xyz = 0;
-    BindFromXml(test2, &testData5);
-    printf("\nTestData5: %i %i %g %s %s\n", testData5.xyz, testData5.dataOne.i, testData5.dataOne.d,
-        testData5.dataOne.s, testData5.dataVec.front().s);
-#endif 
     
     return 0;
 }
