@@ -40,3 +40,4 @@ def deal_data(conn, addr):
     conn.close()
 
 if __name__ == '__main__':
+    socket_service()
