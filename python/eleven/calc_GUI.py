@@ -55,6 +55,11 @@ class ui_eleven_calc(tk.Frame):
         self.lb_res = tk.Listbox(self)
         self.lb_res.pack()
 
+        self.btn_reset = tk.Button(self, text = 'Reset', width = 15, height = 2)
+        self.btn_ok["command"] = self.btn_callback_reset
+        self.btn_ok.bind_all('<Shift_L>', self.btn_event_reset)
+        self.btn_reset.pack()
+
     def __update_lbl_index__(self):
         index = self.index_list+1
         self.lbl_index.configure(text = "The %2d Question!" % index)
@@ -104,6 +109,12 @@ class ui_eleven_calc(tk.Frame):
             self.master.destroy
         else:
             self.btn_callback_ok()
+
+    def btn_callback_reset(self):
+        print('reset')
+
+    def btn_event_reset(self, event):
+        print('event')
 
     def __get_new_work__(self, index):
         list_nums = self.work.get_one_calc(index)
