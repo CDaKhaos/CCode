@@ -2,20 +2,20 @@ import tkinter as tk
 import time
 import calc_eleven as calc
 import calc_db as db
+from settings import Settings
 
 class ui_eleven_calc(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
+        settings = Settings()
         self.master = master
         self.master.title('Eleven Math!')
         self.pack()
         self.create_widgets()
-        self.work = calc.c_calc(10, 10)
-        self.work.create()
+        self.work = calc.c_calc(settings.counts, settings.max_result)
 #        self.work.print()
         self.db = db.c_db()
-        self.index_list = -1
-        self.__next_work__()
+        self.btn_callback_reset()
         self.tm_begin = time.time()
         self.b_right = True
 
@@ -56,8 +56,8 @@ class ui_eleven_calc(tk.Frame):
         self.lb_res.pack()
 
         self.btn_reset = tk.Button(self, text = 'Reset', width = 15, height = 2)
-        self.btn_ok["command"] = self.btn_callback_reset
-        self.btn_ok.bind_all('<Shift_L>', self.btn_event_reset)
+        self.btn_reset["command"] = self.btn_callback_reset
+        self.btn_reset.bind_all('<Shift_L>', self.btn_event_reset)
         self.btn_reset.pack()
 
     def __update_lbl_index__(self):
@@ -111,10 +111,16 @@ class ui_eleven_calc(tk.Frame):
             self.btn_callback_ok()
 
     def btn_callback_reset(self):
+        self.work.create()
+        self.index_list = -1
+        self.__next_work__()
+        self.lb_res.delete(0, tk.END)
         print('reset')
 
     def btn_event_reset(self, event):
-        print('event')
+        self.btn_callback_reset()
+        #print('event')
+
 
     def __get_new_work__(self, index):
         list_nums = self.work.get_one_calc(index)
@@ -133,10 +139,10 @@ class ui_eleven_calc(tk.Frame):
         return self.b_right
 
     def __next_work__(self):
-        print(self.index_list)
+        #print(self.index_list)
         self.index_list += 1
         str_question = self.__get_new_work__(self.index_list)
-        print(str_question)
+        #print(str_question)
         if len(str_question) != 0:
             self.__update_lbl_index__()
             self.__update_lbl_question__(str_question)

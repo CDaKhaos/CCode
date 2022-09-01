@@ -10,6 +10,8 @@ class c_calc():
         self.list_num = list_num
 
     def create(self):
+        self.list_result=[]
+        self.list_num=[]
         while len(self.list_result) < self.counts:
             x1 = random.randint(1, self.max_result)
             x2 = random.randint(1, self.max_result)
@@ -35,7 +37,7 @@ class c_calc():
 
             self.list_result.append(str)
             self.list_num.append([str, n_res])
-        print(self.list_num)
+        #print(self.list_num)
         return self.list_num
 
     def get_one_calc(self, index_list):
@@ -72,7 +74,8 @@ if __name__ == '__main__':
     max_result = 10
     calc = c_calc(count, max_result)
     calc.create()
-    for i in range(count+1):
-        print(calc.get_one_calc(i))
+    calc.create()
+#    for i in range(count+1):
+#        print(calc.get_one_calc(i))
 #    calc.print()
 #    calc.output()

@@ -1,5 +1,6 @@
 import pymysql
 import datetime
+from settings import Settings
 
 CONST_TB_NAME = "TB_CALC_ELEVEN"
 CONST_TB_SELECT = "select * from " + CONST_TB_NAME
@@ -15,8 +16,9 @@ CONST_TB_DROP = "DROP TABLE IF EXISTS " + CONST_TB_NAME
 
 class c_db():
     def __init__(self):
+        settings = Settings()
         # 连接配置信息
-        self.conn = pymysql.connect(host='127.0.0.1',
+        self.conn = pymysql.connect(host=settings.db_ip,
                        port = 3306,
                        user = 'root',
                        password = 'chenc',
