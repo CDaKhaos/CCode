@@ -1,30 +1,68 @@
 # 继承式调用
 import threading
 import time
+from sim_define import em_pro_ctrl
 
 class time_thread(threading.Thread):
     def __init__(self, name):
-        super(MyThreading, self).__init__()
+        super(time_thread, self).__init__()
         self.name = name
+        self.__exit_flag = False
+        self.__run_flag = em_pro_ctrl.STOP
+        self.start_time = time.time()
+        self.now_time = 0
+        self.fast = 1.0
 
     # 线程要运行的代码
     def run(self):
+        step_time = 0
+        count = 0
+        while self.__exit_flag == False:
+            # START
+            if self.__run_flag == em_pro_ctrl.START:
+                self.now_time = time.time()
+                if (self.now_time - step_time) > 1.0 / self.fast:
+                    step_time = self.now_time
+                    count += 1
+                    print("working:%d!" % count)
+            else:        
+                # STOP
+                if self.__run_flag == em_pro_ctrl.STOP:
+                    self.start_time = step_time = time.time()
+                    count = 0
+            # PAUSE and default sleep
+            time.sleep(0.02)
         print("我是线程%s" % self.name)
-        time.sleep(2)
 
-start_time = time.time()
-t1 = MyThreading(1)
-t2 = MyThreading(2)
-end_time = time.time()
-print("两个线程一共的运行时间为：", end_time-start_time)
-print("主线程结束")
+    def set_exit(self, flag=True):
+        self.__exit_flag = flag
 
-"""
-运行结果：
-我是线程1
-我是线程2
-两个线程一共的运行时间为： 0.0010724067687988281
-主线程结束
-线程2运行结束
-线程1运行结束
-"""
+    def set_pro_ctrl(self, pro_ctrl=em_pro_ctrl.START):
+        self.__run_flag = pro_ctrl
+
+
+if __name__ == '__main__':
+    t1 = time_thread(1)
+    t1.start()
+    print("0")
+
+    time.sleep(2)
+    t1.set_pro_ctrl(em_pro_ctrl.START)
+    t1.fast = 2.0
+    print("1")
+
+    time.sleep(5)
+    t1.set_pro_ctrl(em_pro_ctrl.PAUSE)
+    print("2")
+
+    time.sleep(2)
+    t1.set_pro_ctrl(em_pro_ctrl.START)
+    t1.fast = 5.0
+    print("3")
+
+    time.sleep(5)
+    t1.set_exit()
+    print("4")
+
+    t1.join()
+    print("Game Over")
