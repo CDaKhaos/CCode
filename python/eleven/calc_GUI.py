@@ -4,6 +4,7 @@ import calc_eleven as calc
 import calc_db as db
 from settings import Settings
 
+
 class ui_eleven_calc(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
@@ -34,38 +35,49 @@ class ui_eleven_calc(tk.Frame):
         print("hi there, everyone!")
 
         """
-        self.lbl_index = tk.Label(self, text="",font=('Arial',12),width = 15, height=2)
+        self.lbl_index = tk.Label(self, text="", font=(
+            'Arial', 12), width=40, height=2)
         self.lbl_index.pack()
 
-        self.lbl_question = tk.Label(self,text="",bg='green',font=('Arial', 20),width=15, height=3)
+        self.lbl_question = tk.Label(
+            self, text="", bg='green', font=('Arial', 20), width=15, height=3)
         self.lbl_question.pack()
 
-        self.entry_res = tk.Entry(self, font=('arial', 30),bd = 3, width=15)
+        self.entry_res = tk.Entry(self, font=('arial', 30), bd=3, width=15)
         self.entry_res.place(width=150, height=30)
         self.entry_res.pack()
 
-        self.lbl_tip = tk.Label(self, text='Hello, Eleven!', bg='yellow',width = 10, height = 2)
+        self.lbl_tip = tk.Label(
+            self, text='Hello, Eleven!', bg='yellow', width=10, height=2)
         self.lbl_tip.pack()
 
-        self.btn_ok = tk.Button(self, text='Ok,Next',width = 15, height=2)
-        self.btn_ok["command"] = self.btn_callback_ok
-        self.btn_ok.bind_all('<Return>', self.btn_event)
-        self.btn_ok.pack()
-
-        self.lb_res = tk.Listbox(self)
+        self.lb_res = tk.Listbox(self, width=40)
         self.lb_res.pack()
 
-        self.btn_reset = tk.Button(self, text = 'Reset', width = 15, height = 2)
+        # 在主窗口上添加一个frame控件
+        self.frame_btn = tk.Frame()
+        self.frame_btn.pack()
+
+        self.btn_ok = tk.Button(
+            self.frame_btn, text='Ok,Next', width=15, height=2)
+        self.btn_ok["command"] = self.btn_callback_ok
+        self.btn_ok.bind_all('<Return>', self.btn_event)
+        self.btn_ok.pack(side=tk.LEFT)
+
+        self.btn_reset = tk.Button(
+            self.frame_btn, text='Reset', width=15, height=2)
         self.btn_reset["command"] = self.btn_callback_reset
         self.btn_reset.bind_all('<Shift_L>', self.btn_event_reset)
-        self.btn_reset.pack()
+        self.btn_reset.pack(side=tk.RIGHT)
 
     def __update_lbl_index__(self):
         index = self.index_list+1
-        self.lbl_index.configure(text = "The %2d Question!" % index)
+        count, fault = self.db.tb_count_today()
+        str = "The %2d Question!, Total:%2d, Fault:%2d" % (index, count, fault)
+        self.lbl_index.configure(text = str)
 
     def __update_lbl_question__(self, str_question):
-        self.lbl_question.configure(text = str_question)
+        self.lbl_question.configure(text=str_question)
 
     def __update_lbl_tip__(self, n_right):
         if n_right == 1:
@@ -75,11 +87,10 @@ class ui_eleven_calc(tk.Frame):
         elif n_right == 2:
             self.lbl_tip.configure(text="Well Done", bg="yellow")
 
-
     def __update_lb_res__(self, str_res):
         tm_end = time.time()
         f_usage_time = tm_end - self.tm_begin
-        
+
         self.lb_res.insert(tk.END, "%s,  %.02f" % (str_res, f_usage_time))
         if not self.b_right:
             self.lb_res.itemconfig(self.lb_res.size()-1, foreground='red')
@@ -119,8 +130,7 @@ class ui_eleven_calc(tk.Frame):
 
     def btn_event_reset(self, event):
         self.btn_callback_reset()
-        #print('event')
-
+        # print('event')
 
     def __get_new_work__(self, index):
         list_nums = self.work.get_one_calc(index)
@@ -135,14 +145,15 @@ class ui_eleven_calc(tk.Frame):
         n_res = int(self.entry_res.get())
         self.b_right = self.work.check_calc(self.index_list, n_res)
         # record the result for print the listbox
-        self.str_res = str(self.index_list+1) + " : " + self.lbl_question.cget("text") + self.entry_res.get()
+        self.str_res = str(self.index_list+1) + " : " + \
+            self.lbl_question.cget("text") + self.entry_res.get()
         return self.b_right
 
     def __next_work__(self):
-        #print(self.index_list)
+        # print(self.index_list)
         self.index_list += 1
         str_question = self.__get_new_work__(self.index_list)
-        #print(str_question)
+        # print(str_question)
         if len(str_question) != 0:
             self.__update_lbl_index__()
             self.__update_lbl_question__(str_question)
@@ -154,7 +165,7 @@ class ui_eleven_calc(tk.Frame):
             self.btn_ok.configure(text='Exit', command=self.master.destroy)
             self.b_exit = True
 
+
 root = tk.Tk()
 app = ui_eleven_calc(master=root)
 app.mainloop()
-
