@@ -4,6 +4,7 @@ from settings import Settings
 
 CONST_TB_NAME = "TB_CALC_ELEVEN"
 CONST_TB_SELECT = "select * from " + CONST_TB_NAME
+CONST_TB_COUNT = "select count(*) from " + CONST_TB_NAME 
 CONST_TB_CREATE = """create table %s(
     ID INT(6) not null primary key auto_increment,
     WORK_DATE DATE not null,
@@ -59,11 +60,10 @@ class c_db():
         else :
             str_sql = str_select + ' WHERE ' + str_filter
 
+        #print(str_sql)
         self.cur.execute(str_sql)
         for r in self.cur:
             print(r)
- 
-
 
 
 if __name__ == '__main__':
@@ -71,3 +71,7 @@ if __name__ == '__main__':
     db.tb_select('RESULT = 0')
     print('\n')
     db.tb_select('USAGE_TIME > 15')
+    print('\n')
+    dt = datetime.datetime.now().strftime('%Y-%m-%d')
+    str = "WORK_DATE='%s'" % dt
+    db.tb_select(str, CONST_TB_COUNT)
