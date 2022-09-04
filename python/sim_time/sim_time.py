@@ -3,10 +3,19 @@ import threading
 import time
 from sim_define import em_pro_ctrl
 
+
+class sim_event:
+    on_event = []
+
+    @staticmethod
+    def raise_event(*args):
+        for fun in sim_event.on_event:
+            fun(*args)
+
+
 class time_thread(threading.Thread):
-    def __init__(self, name):
+    def __init__(self):
         super(time_thread, self).__init__()
-        self.name = name
         self.__exit_flag = False
         self.__run_flag = em_pro_ctrl.STOP
         self.start_time = time.time()
@@ -24,14 +33,17 @@ class time_thread(threading.Thread):
                 if (self.now_time - step_time) > 1.0 / self.fast:
                     step_time = self.now_time
                     count += 1
-                    print("working:%d!" % count)
-            else:        
+                    #print("working:%d!" % count)
+                    # Event
+                    sim_event.raise_event(count)                         
+
+            else:
                 # STOP
                 if self.__run_flag == em_pro_ctrl.STOP:
                     self.start_time = step_time = time.time()
                     count = 0
             # PAUSE and default sleep
-            time.sleep(0.02)
+            time.sleep(0.01)
         print("我是线程%s" % self.name)
 
     def set_exit(self, flag=True):
@@ -42,7 +54,7 @@ class time_thread(threading.Thread):
 
 
 if __name__ == '__main__':
-    t1 = time_thread(1)
+    t1 = time_thread()
     t1.start()
     print("0")
 
