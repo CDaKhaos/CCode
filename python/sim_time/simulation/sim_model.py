@@ -1,10 +1,14 @@
-class model_base(object):
+
+from sim_interaction import model_interaction
+
+
+class model_base(model_interaction, object):
     register_cls = list()
     model_id = 0
 
     def __new__(cls, *args, **kwargs):
         new_cls = super(model_base, cls).__new__(cls)
-        if cls.__name__ not in ["model_base", "sim_model"]:
+        if cls.__name__ not in ["model_base", "model_man"]:
             # print(cls.__name__)
             model_base.register_cls.append(new_cls)
         return new_cls
@@ -23,6 +27,20 @@ class model_base(object):
         raise NotImplementedError
 
 
+class model_man(model_base):
+    def __init__(self):
+        pass
+
+    def sim(self):
+        print("sim")
+
+    def do_sim(self):
+        # print(model_base.register_cls)
+        for m in model_base.register_cls:
+            m.sim()
+
+
+# test
 class model_a(model_base):
     def __init__(self):
         super().__init__()
@@ -48,25 +66,12 @@ class model_b(model_base):
         print("b,mid=%d" % self.mid)
 
 
-class sim_model(model_base):
-    def __init__(self):
-        pass
-
-    def sim(self):
-        print("sim")
-
-    def do_sim(self):
-        # print(model_base.register_cls)
-        for m in model_base.register_cls:
-            m.sim()
-
-
 if __name__ == '__main__':
-    sim = sim_model()
+    sim = model_man()
 
     a = model_a()
     aa = model_aa()
     b = model_b()
     a1 = model_a()
 
-    sim.print()
+    sim.do_sim()

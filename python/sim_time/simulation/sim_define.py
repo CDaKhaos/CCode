@@ -6,5 +6,5 @@ class em_pro_ctrl(Enum):
     STOP = 3
 
 if __name__ == "__main__":
-    print(pro_ctrl.STOP)
+    print(em_pro_ctrl.STOP.value)
 

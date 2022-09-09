@@ -35,7 +35,7 @@ class time_thread(threading.Thread):
                     count += 1
                     #print("working:%d!" % count)
                     # Event
-                    sim_event.raise_event(count)                         
+                    sim_event.raise_event(count)
 
             else:
                 # STOP
@@ -44,7 +44,6 @@ class time_thread(threading.Thread):
                     count = 0
             # PAUSE and default sleep
             time.sleep(0.01)
-        print("我是线程%s" % self.name)
 
     def set_exit(self, flag=True):
         self.__exit_flag = flag
