@@ -63,8 +63,8 @@ class c_db():
 
         # print(str_sql)
         self.cur.execute(str_sql)
-        # for r in self.cur:
-        # print(r)
+        #for r in cur:
+        #    print(r)
 
         return self.cur.fetchall()
 
@@ -72,6 +72,7 @@ class c_db():
         dt = datetime.datetime.now().strftime('%Y-%m-%d')
         str = "WORK_DATE='%s'" % dt
         data = self.tb_select(str, CONST_TB_COUNT)
+        print('data:',data)
         count = data[0]['count(*)']
 
         str = "WORK_DATE='%s' AND RESULT=0" % dt
@@ -83,7 +84,9 @@ class c_db():
 
 if __name__ == '__main__':
     db = c_db()
-    db.tb_select('RESULT = 0')
+    data = db.tb_select('RESULT = 0')
+    for i in data:
+        print(i)
     print('\n')
     db.tb_select('USAGE_TIME > 15')
     print('\n')
