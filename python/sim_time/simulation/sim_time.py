@@ -1,7 +1,7 @@
 # 继承式调用
 import threading
 import time
-from sim_define import em_pro_ctrl
+from .sim_define import em_pro_ctrl
 
 
 class sim_event:

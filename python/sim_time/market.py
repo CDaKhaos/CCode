@@ -1,12 +1,7 @@
-import time
-import sys
-sys.path.append(".//simulation")
-
-from sim_interaction import g_interaction
-from sim_model import model_base
-from sim_main import sim_main
-from sim_define import em_pro_ctrl
 from enum import Enum
+from simulation import *
+import time
+
 
 class em_csm_type(Enum):
     A = 2

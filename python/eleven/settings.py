@@ -5,8 +5,7 @@ class Settings(object):
         # initialize setting of game
 
         # screen setting
-        self.db_ip = '192.168.31.76'
+        self.db_ip = '127.0.0.1'
 
         self.counts = 10
-        self.max_result = 15
-
+        self.max_result = 10

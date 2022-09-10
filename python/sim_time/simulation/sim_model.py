@@ -1,5 +1,4 @@
-
-from sim_interaction import model_interaction
+from .sim_interaction import model_interaction
 
 
 class model_base(model_interaction, object):
