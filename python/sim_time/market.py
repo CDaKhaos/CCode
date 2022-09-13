@@ -16,18 +16,26 @@ class model_consumer(model_base):
         self.use_time = em_scm_type.value
         self.lift_time = em_scm_type.value
         self.doing = False
+        # subscrip
+        super().subscrip_interaction(['on_start'])
 
-    def sim(self):
+    def sim(self, step):
         # print("consumer, mid=%d" % self.mid)
         if self.doing:
-            #print("consumer, mid=%d" % self.mid)
+            # print("consumer, mid=%d" % self.mid
+
             self.lift_time -= 1
 
-        if self.finish():
-            g_interaction.publish('on_finish', self)
+            if self.finish():
+                self.doing = False
+                g_interaction.publish('on_finish', self)
 
-    def in_market(self):
-        self.doing = True
+    def on_interaction(self, name, msg):
+        def on_start(msg):
+            if msg == self:
+                self.doing = True
+
+        return eval('%s(msg)' % (name))
 
     def finish(self):
         return self.lift_time == 0
@@ -39,34 +47,52 @@ class model_consumer(model_base):
 class model_producer(model_base):
     def __init__(self):
         super().__init__()
+        self.list_done_consumer = list()
+        self.list_wait_consumer = list()
+        self.cur_consumer = None
+        # subscrip
+        super().subscrip_interaction(['on_finish'])
 
-    def sim(self):
-        pass
-        #print("producer,mid=%d" % self.mid)
+    def sim(self, step):
+        if self.cur_consumer == None:
+            if len(self.list_wait_consumer) == 0:
+                print('mid:%d wait' % self.get_mid())
+            else:
+                self.cur_consumer = self.list_wait_consumer.pop(0)
+                g_interaction.publish('on_start', self.cur_consumer)
+
+        else:
+            # working
+            pass
+
+    def on_interaction(self, name, msg):
+        def on_finish(msg):
+            if msg == self.cur_consumer:
+                print("consum:%d, type:%s is finish" %
+                      (self.cur_consumer.get_mid(), self.cur_consumer.type))
+                self.list_done_consumer.append(self.cur_consumer)
+                self.cur_consumer = None
+
+        return eval('%s(msg)' % (name))
+
+    def add_work(self, consumer):
+        self.list_wait_consumer.append(consumer)
+
+    def is_work(self):
+        return self.cur_consumer != None
 
 
 class model_market(model_base):
     def __init__(self):
         super().__init__()
-        self.list_consumer = []
-        self.cur_csm = None
-        # subscrip
-        super().subscrip_interaction(['on_finish'])
+        self.list_consumer = list()
+        self.list_producer = list()
 
-    def sim(self):
+    def sim(self, step):
         #print("market, mid=%d" % self.mid)
-        if self.cur_csm == None and len(self.list_consumer) > 0:
-            self.cur_csm = self.list_consumer.pop(0)
-            self.cur_csm.in_market()
-
-    def on_interaction(self, name, msg):
-        def on_finish(msg):
-            # print(msg == self.cur_csm) True
-            print("consum:%d, type:%s is finish" %
-                  (self.cur_csm.mid, self.cur_csm.type))
-            self.cur_csm = None
-
-        return eval('%s(msg)' % (name))
+        for pro in self.list_producer:
+            if len(self.list_consumer) > 0 and pro.is_work() == False:
+                pro.add_work(self.list_consumer.pop(0))
 
     def add_consumer(self, consumer):
         if consumer.is_VIP():
@@ -74,8 +100,15 @@ class model_market(model_base):
         else:
             self.list_consumer.append(consumer)
 
+    def add_producer(self, producer):
+        self.list_producer.append(producer)
+
     def finish(self):
-        return len(self.list_consumer) == 0 and self.cur_csm == None
+        b_ret = True
+        for pro in self.list_producer:
+            b_ret &= pro.is_work()
+
+        return len(self.list_consumer) == 0 and not b_ret
 
 
 if __name__ == '__main__':
@@ -83,17 +116,21 @@ if __name__ == '__main__':
 
     market = model_market()
 
+    p1 = model_producer()
+    p2 = model_producer()
+    # p3 = model_producer()
+    market.add_producer(p1)
+    market.add_producer(p2)
+    # market.add_producer(p3)
+
     c1 = model_consumer(em_csm_type.A)
     c2 = model_consumer(em_csm_type.B)
     c3 = model_consumer(em_csm_type.VIP)
-
-    p1 = model_producer()
-
     market.add_consumer(c1)
     market.add_consumer(c2)
     market.add_consumer(c3)
 
-    time.sleep(2)
+    time.sleep(1)
     main.set_pro_ctrl(em_pro_ctrl.START)
     main.set_speed(1.0)
 

@@ -63,7 +63,7 @@ class c_db():
 
         # print(str_sql)
         self.cur.execute(str_sql)
-        #for r in cur:
+        # for r in cur:
         #    print(r)
 
         return self.cur.fetchall()
@@ -72,7 +72,7 @@ class c_db():
         dt = datetime.datetime.now().strftime('%Y-%m-%d')
         str = "WORK_DATE='%s'" % dt
         data = self.tb_select(str, CONST_TB_COUNT)
-        print('data:',data)
+        print('data:', data)
         count = data[0]['count(*)']
 
         str = "WORK_DATE='%s' AND RESULT=0" % dt

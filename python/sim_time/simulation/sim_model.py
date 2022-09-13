@@ -19,24 +19,39 @@ class model_base(model_interaction, object):
         return mid
 
     def __init__(self):
-        self.mid = self.get_model_id()
+        self.__mid = self.get_model_id()
+        self.__b_sim_run = True
         pass
+    
+    def get_mid(self):
+        return self.__mid
 
-    def sim(self):
+    def set_sim_run(self, b = False):
+        self.__b_sim_run = b
+
+    def get_sim_run(self):
+        return self.__b_sim_run 
+
+    def sim(self, step):
         raise NotImplementedError
 
 
-class model_man(model_base):
+class model_man():
     def __init__(self):
         pass
 
     def sim(self):
         print("sim")
 
-    def do_sim(self):
+    def do_sim(self, step):
         # print(model_base.register_cls)
+        # cnt = 0
+        # print('register_cls num:', len(model_base.register_cls))
         for m in model_base.register_cls:
-            m.sim()
+            if m.get_sim_run():
+                # cnt += 1
+                m.sim(step)
+        # print('     running cls:', cnt)
 
 
 # test
@@ -44,15 +59,15 @@ class model_a(model_base):
     def __init__(self):
         super().__init__()
 
-    def sim(self):
-        print("a,mid=%d" % self.mid)
+    def sim(self, step):
+        print("a,mid=%d" % self.get_mid())
 
 
 class model_aa(model_a):
     def __init__(self):
         super().__init__()
 
-    def sim(self):
+    def sim(self, step):
         print("aa,mid=%d" % self.mid)
 
 
@@ -61,8 +76,8 @@ class model_b(model_base):
         super().__init__()
         pass
 
-    def sim(self):
-        print("b,mid=%d" % self.mid)
+    def sim(self, step):
+        print("b,mid=%d" % self.get_mid())
 
 
 if __name__ == '__main__':

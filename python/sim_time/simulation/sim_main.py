@@ -12,27 +12,32 @@ class sim_main():
         self.sim_event.on_event.append(self.do_sim_event)
         self.sim_time = time_thread()
         self.sim_time.start()
+        self.__step = 0
         pass
 
     def __del__(self):
         self.sim_time.join()
-        print('Over')
+        print('simulation is over')
 
     def do_sim_event(self, count):
-        print("sim event: ", count)
-        self.sim.do_sim()
+        # print("sim event: ", count)
+        self.__step = count
+        self.sim.do_sim(count)
 
     def set_pro_ctrl(self, em_pro_ctrl):
         print('ctrl:', em_pro_ctrl)
         self.sim_time.set_pro_ctrl(em_pro_ctrl)
 
     def set_speed(self, speed):
-        print('speed:', speed)
+        # print('speed:', speed)
         self.sim_time.fast = speed
 
     def set_exit(self):
         print('exit')
         self.sim_time.set_exit()
+
+    def get_step(self):
+        return self.__step
 
 
 if __name__ == '__main__':
