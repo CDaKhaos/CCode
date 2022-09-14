@@ -1,4 +1,7 @@
-from .sim_interaction import model_interaction
+if __package__ is None or __package__ == '':
+    from sim_interaction import model_interaction
+else:
+    from .sim_interaction import model_interaction
 
 
 class model_base(model_interaction, object):

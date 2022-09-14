@@ -1,7 +1,10 @@
 # 继承式调用
 import threading
 import time
-from .sim_define import em_pro_ctrl
+if __package__ is None or __package__ == '':
+    from sim_define import em_pro_ctrl
+else:
+    from .sim_define import em_pro_ctrl
 
 
 class sim_event:

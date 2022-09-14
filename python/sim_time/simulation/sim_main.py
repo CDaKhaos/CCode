@@ -1,6 +1,11 @@
-from .sim_time import time_thread, sim_event
-from .sim_model import model_man, model_a, model_b
-from .sim_define import em_pro_ctrl
+if __package__ is None or __package__ == '':
+    from sim_time import time_thread, sim_event
+    from sim_model import model_man, model_a, model_b
+    from sim_define import em_pro_ctrl
+else:
+    from .sim_time import time_thread, sim_event
+    from .sim_model import model_man, model_a, model_b
+    from .sim_define import em_pro_ctrl
 
 import time
 
