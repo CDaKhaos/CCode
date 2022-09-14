@@ -1,4 +1,5 @@
 import folium
+from sin_def import get_map_addr
 
 # m = folium.Map()
 
@@ -32,4 +33,4 @@ m = folium.Map([40.002694, 116.322373],
                zoom_start=15,
                control_scale=True
                )
-m.save('map.html')
+m.save(get_map_addr())
