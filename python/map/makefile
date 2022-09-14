@@ -3,6 +3,5 @@ MAIN:
 map:
 	firefox map.html
 clear:
-	rm map.html
 	rm -r __pycache__
 

@@ -25,7 +25,7 @@ def get_map_addr(file_name = 'map.html'):
     elif str_pf == 'vm':
         str_addr = './'
     elif str_pf == 'pad':
-        str_addr = '../storage/shared/Documents/'
+        str_addr = '../../../storage/shared/Documents/'
     else:
         return ''
     return str_addr + file_name
