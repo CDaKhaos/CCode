@@ -40,6 +40,9 @@ class c_calc():
         # print(self.list_num)
         return self.list_num
 
+    def get_question(self):
+        return self.list_result
+
     def get_one_calc(self, index_list):
         if index_list < len(self.list_num):
             return self.list_num[index_list]
@@ -52,7 +55,7 @@ class c_calc():
     def print(self):
         index = 1
         for str_calc in self.list_result:
-            str_print = '%2d:\t %s =   ' % (index, str_calc)
+            str_print = '%2d:\t %s    ' % (index, str_calc)
             print(str_print)
             index += 1
 
@@ -77,5 +80,5 @@ if __name__ == '__main__':
     # calc.create()
 #    for i in range(count+1):
 #        print(calc.get_one_calc(i))
-#    calc.print()
-    calc.output()
+    calc.print()
+    # calc.output()
