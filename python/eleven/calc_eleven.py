@@ -1,5 +1,5 @@
 import random
-from sin_def import sin_get_file_addr
+from sin_def import get_file_addr
 
 
 class c_calc():
@@ -58,7 +58,7 @@ class c_calc():
 
     def output(self):
         index = 1
-        output_file = sin_get_file_addr('calc', 'txt')
+        output_file = get_file_addr('calc', 'docx')
         calc_file = open(output_file, 'w')
 
         for str_calc in self.list_result:
@@ -70,12 +70,12 @@ class c_calc():
 
 
 if __name__ == '__main__':
-    count = 10
-    max_result = 10
+    count = 50
+    max_result = 20
     calc = c_calc(count, max_result)
     calc.create()
-    calc.create()
+    # calc.create()
 #    for i in range(count+1):
 #        print(calc.get_one_calc(i))
 #    calc.print()
-#    calc.output()
+    calc.output()
