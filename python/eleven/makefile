@@ -6,3 +6,4 @@ db:
 	python3 calc_db.py
 clear:
 	rm -r __pycache__
+	rm *.xlsx

@@ -45,7 +45,7 @@ class c_calc():
         return self.list_formula
 
     def random_symbol(self):
-        return random.choice('+-*/')
+        return random.choice('+-')
 
     def get_question(self):
         return self.list_question
