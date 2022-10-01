@@ -6,14 +6,18 @@ import sin_def
 # worksheet as ws
 
 
-cell_heigh = 58
-cell_width = 26
+cell_heigh = 54
+cell_width = 18
 cell_font = xls.styles.Font(size=20)
 cell_border = xls.styles.Border(bottom=xls.styles.Side(
     border_style="dashed", color='000000'))
 cell_align = xls.styles.Alignment(horizontal='left', vertical='center')
-page_margins = xls.worksheet.page.PageMargins(top=0.2, bottom=0.1)
-calc_row = 14
+page_margins = xls.worksheet.page.PageMargins(top=0.4, bottom=0.0)
+day_calc = 20
+day_nums = 3
+all_calc = day_calc * day_nums
+calc_row = 15
+calc_col = int(all_calc / calc_row)
 
 
 def xls_calc():
@@ -22,10 +26,10 @@ def xls_calc():
     ws.title = 'eleven'
     # print(ws.title)
 
-    eleven = calc.c_calc(calc_row*9, 20)
+    eleven = calc.c_calc(all_calc, 10)
     eleven.create()
     list_ques = eleven.get_question()
-    list_calc_ceil = sin_def.list_ceil(list_ques)
+    list_calc_ceil = sin_def.list_ceil(list_ques, calc_col)
     for que in list_calc_ceil:
         ws.append(que)
 
@@ -35,7 +39,7 @@ def xls_calc():
         for c in range(1, cols+1):
             ws.cell(r, c).font = cell_font
             ws.cell(r, c).alignment = cell_align
-            if (r % (calc_row/2)) == 0:
+            if (r % (calc_row/day_nums)) == 0:
                 ws.cell(r, c).border = cell_border
 
     for r in range(1, rows+1):
