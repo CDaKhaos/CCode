@@ -25,6 +25,7 @@ def get_dir():
         str_addr = './'
     elif str_pf == 'vm':
         str_addr = './'
+        # /mnt/hgfs/cyx
     elif str_pf == 'pad':
         str_addr = '../../../storage/shared/Documents/'
     else:
