@@ -1,6 +1,7 @@
 import openpyxl as xls
 import calc_eleven as calc
 import sin_def
+from settings import Settings
 
 # workbook as wb
 # worksheet as ws
@@ -29,6 +30,8 @@ calc_col = int(all_calc / calc_row)
 # 一次包括几周题目
 week_calc = 4
 
+settings = Settings()
+
 
 def xls_calc():
     wb = xls.Workbook()
@@ -37,7 +40,7 @@ def xls_calc():
     # print(ws.title)
 
     for i in range(0, week_calc*2):
-        eleven = calc.c_calc(all_calc, 10)
+        eleven = calc.c_calc(all_calc, settings.max_result)
         eleven.create()
         list_ques = eleven.get_question()
         list_calc_ceil = sin_def.list_ceil(list_ques, calc_col)
