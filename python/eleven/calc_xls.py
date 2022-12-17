@@ -42,7 +42,11 @@ def xls_calc():
     for i in range(0, week_calc*2):
         eleven = calc.c_calc(all_calc, settings.max_result)
         eleven.create()
-        list_ques = eleven.get_question()
+
+        # list_ques = eleven.get_question()
+        # 2022-12-17 change to: level_1
+        list_ques = eleven.get_level_1()
+
         list_calc_ceil = sin_def.list_ceil(list_ques, calc_col)
         for que in list_calc_ceil:
             ws.append(que)

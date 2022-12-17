@@ -2,14 +2,17 @@ import random
 from sin_def import get_file_addr
 
 
+
 class c_calc():
     def __init__(self, counts, max_result):
         self.counts = counts
         self.max_result = max_result
         self.list_formula = []
+        self.list_level_1 = []
 
     def create(self):
         self.list_formula = []
+        self.list_level_1 = []
         while len(self.list_formula) < self.counts:
             x1 = random.randint(1, self.max_result)
             x2 = random.randint(1, self.max_result)
@@ -34,11 +37,20 @@ class c_calc():
                 n_res = x3 * x4
                 x1, x2, n_res = n_res, x3, x4
 
-            str = '%d %s %d = ' % (x1, str_symbol, x2)
-            if [str, n_res] in self.list_formula:
+            str_formula = '%d %s %d = ' % (x1, str_symbol, x2)
+            if [str_formula, n_res] in self.list_formula:
                 continue
 
-            self.list_formula.append([str, n_res])
+            self.list_formula.append([str_formula, n_res])
+
+            ##########################
+            # level_one : 2022.12.17 add
+            list_str = [str(x1), str(x2), str(n_res)]
+            x0 = random.randint(0, 2)
+            list_str[x0] = '    '
+            str_level_1 = '%s %s %s = %s' % (list_str[0], str_symbol, list_str[1], list_str[2])
+            self.list_level_1.append(str_level_1)
+
         return self.list_formula
 
     def random_symbol(self):
@@ -48,6 +60,9 @@ class c_calc():
     def get_question(self):
         return list(map(lambda x: x[0], self.list_formula))
         # return self.list_question
+
+    def get_level_1(self):
+        return self.list_level_1
 
     def get_one_calc(self, index_list):
         if index_list < len(self.list_formula):
@@ -85,6 +100,7 @@ if __name__ == '__main__':
     # print(calc.random_symbol())
     # calc.create()
     calc.create()
+    print(calc.get_level_1())
 #    for i in range(count+1):
 #        print(calc.get_one_calc(i))
     # calc.print()
