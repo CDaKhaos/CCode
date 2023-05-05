@@ -48,7 +48,7 @@ int tset(int i,int j)
 	for(int i = 0; i < LEN; ++i)
 	{
 		double val = (double)(rand()) / RAND_MAX;
-		pD[i] = val;
+		pD[i] = sin(val);
 	}
 	delete[] pD;
 	pD = nullptr;
@@ -72,7 +72,7 @@ int tset1(int i,int j)
 	for (size_t i = 0; i < LEN; ++i)
 	{
 		double val = u(e);
-		pD[i] = val;
+		pD[i] = sin(val);
 	}
 	delete[] pD;
 	pD = nullptr;

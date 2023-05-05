@@ -3,7 +3,7 @@ import math
 import time
 
 def add(i, j):
-    start_t = time.time()
+    # start_t = time.time()
     ret = list()
     for i in range(100*10000):
         ret.append(math.sin(random.uniform(2.0, 100.0)))
