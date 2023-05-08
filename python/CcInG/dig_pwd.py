@@ -16,6 +16,7 @@ sum_res = 0
 while temp_sum:
     sum_res = sum_res + temp_sum % 10
     temp_sum //= 10
+sum_res = sum_res if sum_res != 10 else 1
 
 myprint(sum_res)
 
