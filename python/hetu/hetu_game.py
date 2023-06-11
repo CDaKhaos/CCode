@@ -13,7 +13,7 @@ class hetu_game(game_frame):
         self.text_surface = self.my_font.render('speed:', True, "black")
 
         self.lst_rotate = [0, 360/360, 360/180, 360/90, 360/60, 360/45,
-                           360/30, 360/20, 360/15, 360/9, 360/6, 360/4]
+                           360/30, 360/20, 360/15, 360/9, 360/8, 360/6, 360/4]
         self.rotate = 0
 
         self.start_time = self.end_time = 0
