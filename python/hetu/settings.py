@@ -7,4 +7,7 @@ class Settings(object):
         # screen setting
         self.screen_width = 800
         self.screen_height = 800
+        self.screen_caption = 'Hetu'
         self.bg_color = (230, 230, 230)
+        self.black_color = (0, 0, 0)
+        self.time_delay = 0
