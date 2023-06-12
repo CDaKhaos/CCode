@@ -18,9 +18,9 @@ cell_align = xls.styles.Alignment(horizontal='left', vertical='center')
 page_margins = xls.worksheet.page.PageMargins(
     top=0.8, bottom=0.0, left=0.2, right=0.2)
 # 每天题目数量
-day_calc = 20
+day_calc = 12
 # 每页可做几天
-day_nums = 3
+day_nums = 5
 # 每页题目总数
 all_calc = day_calc * day_nums
 # 每页行数
@@ -43,9 +43,9 @@ def xls_calc():
         eleven = calc.c_calc(all_calc, settings.max_result)
         eleven.create()
 
-        # list_ques = eleven.get_question()
+        list_ques = eleven.get_question()
         # 2022-12-17 change to: level_1
-        list_ques = eleven.get_level_1()
+        # list_ques = eleven.get_level_1()
 
         list_calc_ceil = sin_def.list_ceil(list_ques, calc_col)
         for que in list_calc_ceil:

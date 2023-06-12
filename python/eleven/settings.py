@@ -8,4 +8,4 @@ class Settings(object):
         self.db_ip = '127.0.0.1'
 
         self.counts = 10
-        self.max_result = 20
+        self.max_result = 100

@@ -47,7 +47,7 @@ class c_calc():
             # level_one : 2022.12.17 add
             list_str = [str(x1), str(x2), str(n_res)]
             x0 = random.randint(0, 2)
-            list_str[x0] = '    '
+            list_str[x0] = '  '
             str_level_1 = '%s %s %s = %s' % (list_str[0], str_symbol, list_str[1], list_str[2])
             self.list_level_1.append(str_level_1)
 
