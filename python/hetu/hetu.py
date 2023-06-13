@@ -1,6 +1,7 @@
 import pygame
-from node import c_node, em_yinyang
 from settings import Settings
+from node import c_node
+from node import em_yinyang
 
 
 class hetu():
@@ -18,6 +19,11 @@ class hetu():
         pass
 
     def update(self, rotate):
+        for node in self.lst_node:
+            node.get_pos(rotate)
+        pass
+
+    def draw(self):
         # center
         pygame.draw.circle(self.screen, hetu.settings.black_color,
                            [self.centerx, self.centery], hetu.node_size, 0)
@@ -26,7 +32,7 @@ class hetu():
         for node in self.lst_node:
             width = node.get_yinyang()
             pygame.draw.circle(self.screen, hetu.settings.black_color,
-                               node.get_pos(rotate), hetu.node_size, width)
+                               node.get_pos(), hetu.node_size, width)
 
         # line
         for line in self.lst_line:
@@ -43,8 +49,6 @@ class hetu():
             if node.is_yang():
                 pygame.draw.circle(self.screen, c_node.settings.bg_color,
                                    node.get_pos(), hetu.node_size-1, hetu.node_size-1)
-
-        pass
 
     def __init_graph__(self):
         # center

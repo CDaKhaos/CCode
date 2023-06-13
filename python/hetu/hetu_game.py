@@ -28,10 +28,9 @@ class hetu_game(game_frame):
             if self.rotate > 0:
                 self.rotate -= 1
             pass
-
         pass
 
-    def _draw(self):
+    def _update(self):
         # start
         if self.start_time == 0:
             self.start_time = pygame.time.get_ticks()
@@ -52,8 +51,11 @@ class hetu_game(game_frame):
             self.text_surface = self.my_font.render(text, True, "black")
             self.start_time = 0
             self.count_update = 0
-        self.screen.blit(self.text_surface, (0, 0))
+        pass
 
+    def _draw(self):
+        self.ht.draw()
+        self.screen.blit(self.text_surface, (0, 0))
         pass
 
 

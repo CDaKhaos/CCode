@@ -15,7 +15,7 @@ class game_frame():
             (self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption(self.settings.screen_caption)
 
-        self.runnging = True
+        self.running = True
 
     def _listen(self):
         # respond to  keyboard and mouse item
@@ -25,10 +25,14 @@ class game_frame():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
-                    running = 1-running
+                    self.running = 1-self.running
                 self._listen_KeyDown(event.key)
 
     def _listen_KeyDown(self, event_key):
+        pass
+
+    @abstractmethod
+    def _update(self):
         pass
 
     @abstractmethod
@@ -42,8 +46,10 @@ class game_frame():
 
             self._listen()
 
-            if self.runnging:
-                self._draw()
+            if self.running:
+                self._update()
+
+            self._draw()
 
             # visualiaze the window
             pygame.display.flip()
@@ -64,6 +70,19 @@ if __name__ == '__main__':
 
     # def _listen_KeyDown(self, event_key):
     # pass
+
+    # def _update(self):
+        # self.gc.update()
+        # pass
+    
+    # def _draw(self):
+        # self.gc.draw()
+        # pass
+
+
+# if __name__ == '__main__':
+    # g = my_game()
+    # g.run()
 
     # def _draw(self):
     # self.gc.update(1)
