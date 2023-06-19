@@ -54,7 +54,8 @@ class game_frame():
             # visualiaze the window
             pygame.display.flip()
 
-            # pygame.time.delay(300)
+            if self.settings.time_delay > 0:
+                pygame.time.delay(self.settings.time_delay)
 
 
 if __name__ == '__main__':
