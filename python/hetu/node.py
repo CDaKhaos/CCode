@@ -9,7 +9,6 @@ class em_yinyang(Enum):
 
 
 class c_node():
-    level_gap = 70
     node_id = 0
     settings = Settings()
 
@@ -23,6 +22,7 @@ class c_node():
         self.x = x
         self.y = y
         self.em_yinyang = em_yinyang
+        self.level_gap = c_node.settings.level_gap
 
         self.lst_pos = []
         self.lst_pos.append((x + self.centerx, y + self.centery))

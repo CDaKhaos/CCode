@@ -6,7 +6,6 @@ from node import em_yinyang
 
 class hetu():
     settings = Settings()
-    node_size = 10
 
     def __init__(self, screen):
         self.screen = screen
@@ -26,13 +25,13 @@ class hetu():
     def draw(self):
         # center
         pygame.draw.circle(self.screen, hetu.settings.black_color,
-                           [self.centerx, self.centery], hetu.node_size, 0)
+                           [self.centerx, self.centery], hetu.settings.node_size, 0)
 
         # node
         for node in self.lst_node:
             width = node.get_yinyang()
             pygame.draw.circle(self.screen, hetu.settings.black_color,
-                               node.get_pos(), hetu.node_size, width)
+                               node.get_pos(), hetu.settings.node_size, width)
 
         # line
         for line in self.lst_line:
@@ -43,12 +42,12 @@ class hetu():
         # shixing Circle
         # center
         pygame.draw.circle(self.screen, hetu.settings.bg_color,
-                           [self.centerx, self.centery], hetu.node_size-1, hetu.node_size-1)
+                           [self.centerx, self.centery], hetu.settings.node_size-1, hetu.settings.node_size-1)
 
         for node in self.lst_node:
             if node.is_yang():
                 pygame.draw.circle(self.screen, c_node.settings.bg_color,
-                                   node.get_pos(), hetu.node_size-1, hetu.node_size-1)
+                                   node.get_pos(), hetu.settings.node_size-1, hetu.settings.node_size-1)
 
     def __init_graph__(self):
         # center
