@@ -1,4 +1,5 @@
 import pygame
+import random
 from shapely import ops
 from shapely import geometry
 from settings import Settings
@@ -13,12 +14,13 @@ class envelope():
         self.centerx = screen.get_rect().centerx
         self.centery = screen.get_rect().centery
 
-        self.sml_radius: int = 30
+        self.__sml_radius: int = 30
 
         self.circles: list = []
         for i in range(10):
+            self.__sml_radius += random.randint(-5, 5)
             self.circles.append(
-                c_circle([self.centerx, self.centery], self.sml_radius))
+                c_circle([self.centerx, self.centery], self.__sml_radius))
         pass
 
     def update(self):
