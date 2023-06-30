@@ -33,6 +33,9 @@ class c_circle():
     def _move(self, x, y):
         self._lst_polygon = [(pt[0]+x, pt[1]+y) for pt in self._lst_polygon]
 
+    def _rotate(self, angle):
+        pass
+
     def get_polygon(self):
         return self._lst_polygon
 

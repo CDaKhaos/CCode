@@ -5,6 +5,7 @@ from shapely import geometry
 from settings import Settings
 from math import pi
 from circle import c_circle
+from ellipse import c_ellipse
 
 
 class envelope():
@@ -16,11 +17,16 @@ class envelope():
 
         self.__sml_radius: int = 30
 
-        self.circles: list = []
-        for i in range(10):
+        self.shape: list = []
+        for i in range(3):
             self.__sml_radius += random.randint(-5, 5)
-            self.circles.append(
+            self.shape.append(
                 c_circle([self.centerx, self.centery], self.__sml_radius))
+            
+            ellipse_y = random.randint(0, 20) / 10 * self.__sml_radius
+            self.shape.append(
+                c_ellipse([self.centerx, self.centery], self.__sml_radius, ellipse_y))
+
         pass
 
     def update(self):
@@ -29,7 +35,7 @@ class envelope():
     def draw(self):
         # convert to geometry
         geoPolygons = []
-        for circle in self.circles:
+        for circle in self.shape:
             geoPolygons.append(geometry.Polygon(circle.auto_move()))
 
         # calc union
