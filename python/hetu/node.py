@@ -1,4 +1,4 @@
-import pygame
+import math
 from enum import Enum
 from settings import Settings
 
@@ -50,12 +50,14 @@ class c_node():
         return self.lst_pos[self.__rotate_angle]
 
     def __rotate(self, rotate):
-        v1 = pygame.math.Vector2(self.x, self.y)
-        v2 = v1.rotate(rotate)
-        x = v2[0]
-        y = v2[1]
-        return x + self.centerx, y + self.centery
-        # print(v2)
+        cos_a = math.cos(rotate)
+        sin_a = math.sin(rotate)
+        tmp_x = self.x 
+        tmp_y = self.y 
+
+        x = tmp_x * cos_a + tmp_y * sin_a + self.centerx
+        y = tmp_y * cos_a - tmp_x * sin_a + self.centery
+        return x, y
 
     def get_yinyang(self):
         return self.em_yinyang.value

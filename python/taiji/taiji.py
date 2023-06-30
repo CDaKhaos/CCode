@@ -1,6 +1,6 @@
 import pygame
+import math
 from settings import Settings
-from math import pi
 
 
 class taiji():
@@ -28,25 +28,30 @@ class taiji():
     def update(self, rotate):
         self.pos_yin = self.rotate(self.pos_yin, rotate)
         self.pos_yang = self.rotate(self.pos_yang, rotate)
-        self.pos_polygon = [ self.rotate(self.pos_polygon[0], rotate),
-                self.rotate(self.pos_polygon[1], rotate),
-                self.rotate(self.pos_polygon[2], rotate),
-                self.rotate(self.pos_polygon[3], rotate)]
+        self.pos_polygon = [self.rotate(self.pos_polygon[0], rotate),
+                            self.rotate(self.pos_polygon[1], rotate),
+                            self.rotate(self.pos_polygon[2], rotate),
+                            self.rotate(self.pos_polygon[3], rotate)]
         pass
 
     def rotate(self, pos, rotate):
-        v1 = pygame.math.Vector2(pos[0] - self.centerx, pos[1] - self.centery).rotate(rotate)
-        x = v1[0]
-        y = v1[1]
+        cos_a = math.cos(rotate)
+        sin_a = math.sin(rotate)
+
+        tmp_x = pos[0] - self.centerx
+        tmp_y = pos[1] - self.centery
+        x = tmp_x * cos_a + tmp_y * sin_a
+        y = tmp_y * cos_a - tmp_x * sin_a
         return x + self.centerx, y + self.centery
 
     def draw(self):
         # big circle
-        pygame.draw.circle(self.screen, self.settings.black_color, 
-                [self.centerx, self.centery], self.big_radius, 0)
+        pygame.draw.circle(self.screen, self.settings.black_color,
+                           [self.centerx, self.centery], self.big_radius, 0)
 
         # polygon
-        pygame.draw.polygon(self.screen, self.settings.bg_color, self.pos_polygon, 0)
+        pygame.draw.polygon(
+            self.screen, self.settings.bg_color, self.pos_polygon, 0)
 
         # mid circel
         # mid circle yang
@@ -66,5 +71,5 @@ class taiji():
 
         # big circle yang
         pygame.draw.circle(self.screen, self.settings.black_color,
-                [self.centerx, self.centery], self.big_radius, 2)
+                           [self.centerx, self.centery], self.big_radius, 2)
         pass
