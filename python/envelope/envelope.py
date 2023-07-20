@@ -22,12 +22,10 @@ class envelope():
             self.__sml_radius += random.randint(-5, 5)
             self.shape.append(
                 c_circle([self.centerx, self.centery], self.__sml_radius))
-            
+
             ellipse_y = random.randint(0, 20) / 10 * self.__sml_radius
             self.shape.append(
                 c_ellipse([self.centerx, self.centery], self.__sml_radius, ellipse_y))
-
-        pass
 
     def update(self):
         pass
@@ -35,13 +33,12 @@ class envelope():
     def draw(self):
         # convert to geometry
         geoPolygons = []
-        for circle in self.shape:
-            geoPolygons.append(geometry.Polygon(circle.auto_move()))
+        for shape in self.shape:
+            geoPolygons.append(geometry.Polygon(shape.auto_move()))
 
         # calc union
         geoPoints = ops.unary_union(geoPolygons)
         if geoPoints.geom_type == 'MultiPolygon':
-            # print(list(geoPoints.geoms))
             for geos in list(geoPoints.geoms):
                 self.draw_geoPloygon(geos)
 
