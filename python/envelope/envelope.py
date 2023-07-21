@@ -7,6 +7,7 @@ from math import pi
 from circle import c_circle
 from ellipse import c_ellipse
 from fan import c_fan
+from rectangle import c_rectangle
 
 
 class envelope():
@@ -33,6 +34,11 @@ class envelope():
             # print(flare, normal)
             self.shape.append(
                 c_fan([self.centerx, self.centery], self.__sml_radius, flare, normal))
+
+            width = random.randint(10, 100)
+            heigh = random.randint(10, 100)
+            self.shape.append(c_rectangle(
+                [self.centerx, self.centery], width, heigh))
 
     def update(self):
         pass
