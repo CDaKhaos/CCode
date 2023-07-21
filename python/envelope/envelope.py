@@ -6,6 +6,7 @@ from settings import Settings
 from math import pi
 from circle import c_circle
 from ellipse import c_ellipse
+from fan import c_fan
 
 
 class envelope():
@@ -26,6 +27,32 @@ class envelope():
             ellipse_y = random.randint(0, 20) / 10 * self.__sml_radius
             self.shape.append(
                 c_ellipse([self.centerx, self.centery], self.__sml_radius, ellipse_y))
+
+            flare = random.randint(10, 360)
+            normal = random.randint(0, 360)
+            # print(flare, normal)
+            self.shape.append(
+                c_fan([self.centerx, self.centery], self.__sml_radius, flare, normal))
+
+    def update(self):
+        pass
+
+    def draw(self):
+        # convert to geometry
+        geoPolygons = []
+        for shape in self.shape:
+            geoPolygons.append(geometry.Polygon(shape.auto_move()))
+
+        # calc union
+        geoPoints = ops.unary_union(geoPolygons)
+        if geoPoints.geom_type == 'MultiPolygon':
+            for geos in list(geoPoints.geoms):
+                self.draw_geoPloygon(geos)
+
+        elif geoPoints.geom_type == 'Polygon':
+            self.draw_geoPloygon(geoPoints)
+
+        pass
 
     def update(self):
         pass
