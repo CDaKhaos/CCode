@@ -15,14 +15,16 @@ setting_megre_freq = 1
 # 合批门限-时间(s)
 setting_seperate_time = 60*30
 # 测向线长度（最大探测距离(100KM)）
-setting_len_doa = 5
+setting_len_doa = 3
 # 定位校准距离（100KM）
-setting_pos_min = 1
-setting_pos_max = 5
+setting_pos_min = 0.1
+setting_pos_max = 3
 # 测向线融合-时间（s）
 setting_megre_doa_time = 10
 # 测向线融合-角度（s）
 setting_megre_doa_angel = 8
+# 删除原始数据集合小于门限值的结论
+setting_del_target = 5
 
 
 # 测向线
@@ -77,9 +79,11 @@ class line():
                  (self.p1[1], self.p2[1]), color='blue')
 
 # 结论表
+
+
 class result_freqlist():
     def __init__(self):
-        self.id = 0             
+        self.id = 0
         self.type = ''              # 原始-信号类型
 
         self.controy = ''           # 识别-国家地区
@@ -155,7 +159,7 @@ class result_freqlist():
     def _cons_doa(self):
         self.list_doa_line.clear()
 
-        # 测向方位合批 通过时间和角度 
+        # 测向方位合批 通过时间和角度
         list_lines = []
         lines = []
         time_temp = self.list_time[0]
@@ -184,9 +188,6 @@ class result_freqlist():
             x = lon + setting_len_doa * np.cos(rad)
             y = lat + setting_len_doa * np.sin(rad)
             self.list_doa_line.append(line((lon, lat), (x, y)))
-
-        # print(lines)
-
         return len(self.list_doa_line) > 0
 
     # 根据测向线定位
@@ -221,7 +222,7 @@ class pro_freqlist():
         self.new_res(self.data_ori[0])      # 第一个是新建
         for ori in self.data_ori[1:]:
             is_new = False
-             # 反向遍历结论表比较
+            # 反向遍历结论表比较
             for res in reversed(self.list_result):
                 if res.add_ori(ori) == True:  # merge
                     is_new = False
@@ -233,22 +234,27 @@ class pro_freqlist():
 
         # 定位
         index = 0
-        for res in self.list_result:
+        for res in self.list_result[:]:
+            # delete 
+            if len(res.list_id) < setting_del_target:
+                self.list_result.remove(res)
+                continue
+
             res.id = index
             res.pro_data()
             index += 1
 
+            print(len(res.list_id))
             res.get_pos()
 
-
         # 识别
-
 
         # print(len(self.list_result))
         # for x in self.list_result:
             # x.print()
 
     # 所有的目标：时间测向，时间频率展示
+
     def show(self):
         plt.figure()
         i = 0
@@ -275,7 +281,8 @@ class pro_freqlist():
     def show_doa_time(self):
         plt.figure()
         num = len(self.list_result)
-        row = int(num / 4) + 1
+        row = int(num / 4) + (lambda x:1 if (x > 0) else 0)(num % 4)
+        print("row:", row)
         col = 5
         i = 1
         for x in self.list_result:
@@ -292,7 +299,7 @@ class pro_freqlist():
         plt.figure()
         num = len(self.list_result)
         col = 4
-        row = int(num / col) + 1
+        row = int(num / 4) + (lambda x:1 if (x > 0) else 0)(num % 4)
         i = 1
         doa_len = 10
         for data in self.list_result:
@@ -321,4 +328,6 @@ if __name__ == '__main__':
     data_pre = prepro.data_read('Data.xlsx', 'Sheet1')
     pre_f = pro_freqlist(data_pre.read())
     pre_f.pro()
+    # pre_f.show()
+    # pre_f.show_doa_time()
     pre_f.show_doa()

@@ -3,6 +3,7 @@
 """
 
 import openpyxl as xls
+import math
 
 # 原始数据
 class data():
@@ -32,10 +33,13 @@ class data_read():
         self.list_data: list = []
         col_index = [0, 5, 7, 11, 12]
         for row in self.ws.iter_rows(min_row=2, max_row=292, min_col=1, max_col=15, values_only=True):
+            # if row[col_index[0]] != 226.05:
+                # continue
+
             d = data('DP',
                      row[col_index[0]],
                      row[col_index[1]].timestamp(),
-                     row[col_index[2]]/10,
+                     self.doa_conver(row[col_index[2]]),
                      row[col_index[3]],
                      row[col_index[4]])
             self.list_data.append(d)
@@ -52,12 +56,21 @@ class data_read():
         # ll = list(map(lambda x : x.id, self.list_data))
         # print(ll)
 
-
         # test
         # d = data('11', 1,3,4,5,6)
         # self.list_data.append(d)
     
         return self.list_data
+
+    def doa_conver(self, doa):
+        doa /= 10
+        # print("1:", doa)
+        if doa <= 90:
+            doa = 90 - doa
+        else:
+            doa = math.fabs(450-doa)
+        # print("2:", doa)
+        return doa
 
     def print(self):
         for data in self.list_data:
