@@ -78,6 +78,6 @@ class data_read():
 
 
 if __name__ == '__main__':
-    data_pre = data_read('Data.xlsx', 'Sheet1')
+    data_pre = data_read('AA.xlsx', 'Sheet1')
     data_pre.read()
     data_pre.print()

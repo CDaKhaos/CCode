@@ -20,7 +20,6 @@ class envelope():
         self.__sml_radius: int = 30
 
         self.shape: list = []
-        """
         for i in range(3):
             self.__sml_radius += random.randint(-5, 5)
             self.shape.append(
@@ -40,7 +39,26 @@ class envelope():
             heigh = random.randint(10, 100)
             self.shape.append(c_rectangle(
                 [self.centerx, self.centery], width, heigh))
-        # """
+
+    def update(self):
+        pass
+
+    def draw(self):
+        # convert to geometry
+        geoPolygons = []
+        for shape in self.shape:
+            geoPolygons.append(geometry.Polygon(shape.auto_move()))
+
+        # calc union
+        geoPoints = ops.unary_union(geoPolygons)
+        if geoPoints.geom_type == 'MultiPolygon':
+            for geos in list(geoPoints.geoms):
+                self.draw_geoPloygon(geos)
+
+        elif geoPoints.geom_type == 'Polygon':
+            self.draw_geoPloygon(geoPoints)
+
+        pass
 
     def update(self):
         pass

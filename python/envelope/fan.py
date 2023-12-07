@@ -11,16 +11,16 @@ class c_fan(c_shape):
         self.for_step = int(self.flare / 10)
         if self.for_step < 2:
             self.for_step = int(self.flare / 2)
+        # print(flare_angle, self.flare, self.for_step)
 
         super().__init__(center[0], center[1])
-        self._rotate(normal_angle)
 
     def _polygon(self):
         lst_point: list = []
         lst_point.append(c_point()) # center point
 
         for i in range(-self.flare, self.flare, self.for_step):
-            tmp = i - 90
+            tmp = i - 90 + self.normal
             x = math.cos(tmp * math.pi / 180) * self.r
             y = math.sin(tmp * math.pi / 180) * self.r
             lst_point.append(c_point(x, y))
