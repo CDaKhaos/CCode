@@ -1,12 +1,14 @@
 from game_frame import game_frame
 import pygame
 from envelope import envelope
+from entity import entity
 
 
 class envelope_game(game_frame):
     def __init__(self):
         super().__init__()
-        self.main = envelope(self.screen)
+        self.envelope = envelope(self.screen)
+        self.entity = entity(self.screen)
 
         # fonts = pygame.font.get_fonts()
         self.my_font = pygame.font.SysFont('lato', 24, True)
@@ -28,7 +30,8 @@ class envelope_game(game_frame):
             self.start_time = pygame.time.get_ticks()
 
         # update
-        self.main.update()
+        self.envelope.update()
+        self.entity.update()
 
         # end
         self.count_update += 1
@@ -43,7 +46,9 @@ class envelope_game(game_frame):
         pass
 
     def _draw(self):
-        self.main.draw()
+        self.envelope.draw()
+        self.entity.draw()
+
         # self.screen.blit(self.text_surface, (0, 0))
         pass
 

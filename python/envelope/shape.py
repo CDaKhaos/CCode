@@ -11,9 +11,9 @@ class c_point():
     def move(self, pt_move):
         self.x += pt_move.x
         self.y += pt_move.y
+        return c_point(self.x, self.y)
 
-    def rand(self):
-        setp = 5
+    def rand(self, setp = 5):
         x = random.randint(-setp, setp)
         y = random.randint(-setp, setp)
         return c_point(x, y)
@@ -23,6 +23,14 @@ class c_point():
 
     def y(self):
         return self.y
+
+    def distance(self, pt):
+        x = pt.x - self.x
+        y = pt.y - self.y
+        return math.sqrt(x*x + y*y)
+
+    def print(self):
+        print(self.x, self.y)
 
 
 class c_shape():
@@ -40,9 +48,9 @@ class c_shape():
 
     def get_polygon(self):
         return self._lst_polygon
-    
+
     def get_polygon_lst(self):
-        ret_lst : list = [ [pt.x, pt.y] for pt in self._lst_polygon ]
+        ret_lst: list = [[pt.x, pt.y] for pt in self._lst_polygon]
         return ret_lst
 
     @abstractmethod
@@ -52,7 +60,6 @@ class c_shape():
     @abstractmethod
     def _auto_move(self):
         pass
-
 
     def _get_start_pt(self, centerx, centery):
         x = centerx / 2
@@ -66,14 +73,17 @@ class c_shape():
             pt.move(pt_move)
         self._pt_center.move(pt_move)
 
-    def _rotate(self, angle):
-        direction = random.choice([-1, 0, 1])
-        if direction == 0:
-            return
+    def _rotate(self, angle, rand_rotate=True):
+        direction = 1
+        if rand_rotate == True:
+            direction = random.choice([-1, 0, 1])
+            if direction == 0:
+                return
 
-        angle = random.randint(0, 5)
-        cos_a = math.cos(angle)
-        sin_a = math.sin(angle)
+        rad = angle*math.pi / 180
+
+        cos_a = math.cos(rad)
+        sin_a = math.sin(rad)
 
         for pt in self._lst_polygon:
             x_tmp = pt.x - self._pt_center.x
