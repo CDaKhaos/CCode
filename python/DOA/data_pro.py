@@ -18,13 +18,17 @@ setting_seperate_time = 60*30
 setting_len_doa = 3
 # 定位校准距离（100KM）
 setting_pos_min = 0.1
-setting_pos_max = 3
+# setting_pos_max = 3
 # 测向线融合-时间（s）
 setting_megre_doa_time = 10
 # 测向线融合-角度（s）
 setting_megre_doa_angel = 8
 # 删除原始数据集合小于门限值的结论
 setting_del_target = 5
+
+EARTH_R = 6371.393
+EARTH_V1 = math.pi / 180 
+EARTH_V2 = EARTH_R * 2 * math.pi / 360
 
 
 # 测向线
@@ -71,7 +75,7 @@ class line():
         x1 = pos[0] - x
         y1 = pos[1] - y
         dis = math.sqrt(x1 * x1 + y1 * y1)
-        return (dis > setting_pos_min) & (dis < setting_pos_max)
+        return (dis > setting_pos_min) & True #(dis < setting_pos_max)
 
     # 展示
     def show(self, plt):
@@ -183,10 +187,13 @@ class result_freqlist():
             doa = self.list_doa[index]
             lon = self.list_lon_p[index]
             lat = self.list_lat_p[index]
-
-            rad = np.radians(doa)
-            x = lon + setting_len_doa * np.cos(rad)
-            y = lat + setting_len_doa * np.sin(rad)
+            
+            # construct line
+            rad = math.radians(doa)
+            # x = lon + setting_len_doa * math.sin(doa * EARTH_V1) / EARTH_V2
+            # y = lat + setting_len_doa * math.cos(doa * EARTH_V1) / EARTH_V2
+            x = lon + setting_len_doa * math.sin(rad)
+            y = lat + setting_len_doa * math.cos(rad)
             self.list_doa_line.append(line((lon, lat), (x, y)))
         return len(self.list_doa_line) > 0
 
