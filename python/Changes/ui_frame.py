@@ -18,12 +18,13 @@ class ui_frame(tk.Frame):
         self._WIN_TITLE_HEI = 30
         self._resize()
         self._YANG_YAO = 'balck'
+        self._FONT = ('仿宋', self._HEI*2)
     
     def _resize(self):
         self._LEN = self._HEI * 11
         self._YIN_GAP = self._LEN * 0.372 / 4   #纯属为了好看，用了黄金分割比例0.618
         self._Y_GAP = self._LEN - self._HEI - self._HEI
-        self._FONT = ('仿宋', self._HEI*2)
+        
 
     def center_window(self, width, height):
         #获取屏幕尺寸
@@ -36,19 +37,30 @@ class ui_frame(tk.Frame):
         #设置窗口居中显示
         self.master.geometry(size)
 
-    def _draw_EightDiagrams(self, eightD, x, y):
-        for value in eightD.value:
-            y = self._draw_yao(value, x, y)
+    def _draw_EightDiagrams(self, eightD, x, y, lstYAO = ["", "", ""]):
+        for value, txt in zip(eightD.value, lstYAO):
+            y = self._draw_yao(value, x, y, txt)
         return y
 
-    def _draw_yao(self, yao, x, y):
+    def _draw_yao(self, yao, x, y, txtYAO):
         ye = y + self._HEI
         if yao == YAO.YANG.value:
             self.cv.create_rectangle(x, y, x+self._LEN, ye, fill=self._YANG_YAO)
+
         else:
             mid = x + self._LEN / 2
             self.cv.create_rectangle(x, y, mid - self._YIN_GAP, ye, fill = 'black')
             self.cv.create_rectangle(mid + self._YIN_GAP, y, x+self._LEN, ye, fill = 'black')
+
+        if txtYAO != None:
+            self.cv.create_text(x + self._LEN + self._HEI, y+self._Y_START, 
+                text = txtYAO,
+                font = self._FONT,
+                fill='black',
+                anchor = 'w',
+                justify = tk.LEFT
+                )
+        
         return ye+self._HEI
 
     @abstractmethod

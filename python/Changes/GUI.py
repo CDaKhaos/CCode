@@ -2,7 +2,7 @@
 
 import tkinter as tk
 from ui_frame import ui_frame
-from data import YAO, EightDiagrams, ChangesDiagrams
+from data import ChangesName
 from GUI_ONE import ui_one
 
 class ui_Changes(ui_frame):
@@ -10,7 +10,7 @@ class ui_Changes(ui_frame):
         super().__init__(master)
         self.master.title('Changes!')
 
-        self.lst_ChangesD = list(ChangesDiagrams)
+        self.lst_ChangesD = list(ChangesName)
 
         # abstractmethod
         self._YANG_YAO = 'black'
@@ -30,7 +30,7 @@ class ui_Changes(ui_frame):
 
     def _draw(self):
         set_col = 8
-        row = len(ChangesDiagrams) / set_col
+        row = len(ChangesName) / set_col
 
         for i, value in enumerate(self.lst_ChangesD, 0):
             x = self._X_START + (self._LEN * 2) * (i % set_col)
